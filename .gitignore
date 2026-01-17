@@ -4,7 +4,8 @@
 # Ignore Gradle build output directory
 build
 
-# 
-app/src/main/assets/
-app/libs.jar
+#
 local.properties
+.idea
+app-release-signed.apk
+app-release-signed.apk.idsig
