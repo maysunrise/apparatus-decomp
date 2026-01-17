@@ -52,7 +52,7 @@ public class ApparatusApplication extends AndroidApplication implements Apparatu
     public static final int SAVE_DIALOG = 5;
     protected static final int SETTINGS_DIALOG = 17;
     protected static final int WELCOME_DIALOG = 20;
-    public static String changelog = "Thanks for downloading the unofficial Apparatus 1.2.2 update! This update brings various quality-of-life improvements to Apparatus.\n\nWhat's new in version 1.2.2 Beta 3?\n* Changed domain name for apparatus-web\n\nWhat's new in version 1.2.2 Beta 2?\n* Added Valley!\n* Added the Christmas background as a background to choose from.\n\t* When the Christmas background is enabled, buckets are now colored red like in the Christmas level package.\n* Added the classic default background as a new background!\n* Removed \"Adjusting graphics\" check.\n* Disabled bounds check (Experimental!).\n\nWhat's new in version 1.2.2 Beta 1?\n* Restored music and some sounds to those pre-Christmas update\n* Initial support for apparatus-web\n* Removed Principia Google Play link\n* Removed Facebook integration\n* Various bugfixes and tweaks, general maintenance to provide a more pleasant experience\n";
+    public static String changelog = "This is a work-in-progress decompilation for Apparatus.";
     private int autosave_id;
     private ControlsDialog controls_dialog;
     private GraphicsDialog graphics_dialog;
@@ -609,7 +609,7 @@ public class ApparatusApplication extends AndroidApplication implements Apparatu
                             @Override // java.lang.Runnable
                             public void run() {
                                 if (which == 0) {
-                                    LevelMenu.category = 1;
+                                    LevelMenu.category = 0;
                                 } else {
                                     LevelMenu.category = 2;
                                 }
