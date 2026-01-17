@@ -113,18 +113,20 @@ public class ObjectFactory {
         BufferedInputStream testx = new BufferedInputStream(s);
         testx.read(b, 0, 2);
         int num_objects = ((b[0] & 255) << 8) | (b[1] & 255);
+        Gdx.app.log("DEBUG", "Number of objects: " + num_objects);
         BaseObject[] objects = new BaseObject[num_objects];
         BinaryIO.debug = true;
         if (num_objects <= 0) {
             return objects;
         }
+
         while (true) {
-            int n = testx.read(b, 0, 6);
-            if (n != -1) {
+            if (testx.read(b, 0, 6) != -1) {
                 int group = b[0] & 255;
                 int child = ((b[1] & 255) << 8) | (b[2] & 255);
                 int unique = ((b[3] & 255) << 8) | (b[4] & 255);
                 int num_properties = b[5] & 255;
+                Gdx.app.log("DEBUG", "Group: " + group + ", Child: " + child + ", Unique: " + unique + ", Properties: " + num_properties);
                 BaseObject o = null;
                 if (group != 0) {
                     o = adapter.create(world, group, child);
@@ -134,6 +136,7 @@ public class ObjectFactory {
                 float angle = BinaryIO.read_float(testx);
                 float scale = BinaryIO.read_float(testx);
                 int layer = BinaryIO.read_byte(testx);
+                Gdx.app.log("DEBUG", "Position: (" + x + ", " + y + "), Angle: " + angle + ", Scale: " + scale + ", Layer: " + layer);
                 if (o != null) {
                     o.__unique_id = unique;
                     if (o instanceof GrabableObject) {
@@ -154,16 +157,13 @@ public class ObjectFactory {
                         int p = 0;
                         while (true) {
                             if (p < num_properties) {
-                                int name_len = BinaryIO.read_int(testx);
-                                byte[] bname = new byte[name_len];
+                                byte[] bname = new byte[BinaryIO.read_int(testx)];
                                 testx.read(bname);
                                 String name = new String(bname);
                                 Object value = null;
-                                int type = testx.read();
-                                switch (type) {
+                                switch (testx.read()) {
                                     case 0:
-                                        int s_len = BinaryIO.read_int(testx);
-                                        byte[] bval = new byte[s_len];
+                                        byte[] bval = new byte[BinaryIO.read_int(testx)];
                                         testx.read(bval);
                                         value = new String(bval);
                                         break;
@@ -186,25 +186,26 @@ public class ObjectFactory {
                                         break;
                                 }
                                 o.set_property(name, value);
-                                if (!error) {
-                                    p++;
+                                Gdx.app.log("DEBUG", "Property: " + name + " = " + value);
+                                if (error) {
+                                    Gdx.app.log("ERROR", "Unknown property value type");
                                 } else {
-                                    Gdx.app.log("ERROR", "unknown property value type");
+                                    p++;
                                 }
-                            }
-                        }
-                        if (!error) {
+                            } else
+                                break;
                         }
                     }
-                    boolean z = o instanceof Damper;
                     objects[num_added_objects] = o;
                     num_added_objects++;
                     if (num_added_objects >= num_objects) {
+                        break;
                     }
                 } else if (num_properties > 0) {
-                    Gdx.app.log("ERROR", "could not create object, but object has " + num_properties + " properties. Bailing out!");
+                    Gdx.app.log("ERROR", "Could not create object, but object has " + num_properties + " properties. Bailing out!");
                 }
-            }
+            } else
+                break;
         }
         if (num_added_objects == num_objects) {
             return objects;

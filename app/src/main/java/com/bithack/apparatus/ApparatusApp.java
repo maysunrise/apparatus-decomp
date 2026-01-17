@@ -100,7 +100,6 @@ public class ApparatusApp implements ApplicationListener {
         this.loading_screen = new LoadingScreen(this, _start);
         current = this.loading_screen;
         current.resume();
-        L.load("en");
     }
 
     public void play() {

@@ -140,7 +140,7 @@ public class UndoManager {
                 int x = 0;
                 while (x < this.states[this.step].properties.size()) {
                     int y = 0;
-                    while (true) {
+                    //while (true) {
                         if (y < this.pending_obj.properties.length) {
                             if (!this.pending_obj.properties[y].name.equals(this.states[this.step].properties.get(x).name)) {
                                 y++;
@@ -149,7 +149,7 @@ public class UndoManager {
                                 x--;
                             }
                         }
-                    }
+                    //}
                     x++;
                 }
                 if (this.pending_obj.layer != this.states[this.step].layer || !this.states[this.step].properties.isEmpty()) {

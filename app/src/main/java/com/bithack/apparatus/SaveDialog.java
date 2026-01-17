@@ -32,7 +32,7 @@ public class SaveDialog {
                     final ApparatusApplication apparatusApplication2 = app;
                     apparatusApplication.run_on_gl_thread(new Runnable() { // from class: com.bithack.apparatus.SaveDialog.1.1
                         @Override // java.lang.Runnable
-                        public void run() throws InterruptedException {
+                        public void run() {
                             try {
                                 Thread.sleep(100L);
                             } catch (Exception e) {

@@ -1,5 +1,6 @@
 package com.bithack.apparatus;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.World;
 import com.bithack.apparatus.ObjectFactory;
 import com.bithack.apparatus.ResourceFactory;
@@ -47,6 +48,7 @@ public class ObjectFactoryAdapter extends ObjectFactory.Adapter {
     @Override // com.bithack.apparatus.ObjectFactory.Adapter
     public BaseObject create(World world, int g, int c) {
         BaseObject o;
+        Gdx.app.log("ObjectFactoryAdapter", "Creating object group " + g + " child " + c);
         switch (g) {
             case 1:
                 switch (c) {
@@ -66,6 +68,7 @@ public class ObjectFactoryAdapter extends ObjectFactory.Adapter {
                         o = null;
                         break;
                 }
+                break;
             case 2:
                 switch (c) {
                     case 0:
@@ -129,6 +132,7 @@ public class ObjectFactoryAdapter extends ObjectFactory.Adapter {
                         o = null;
                         break;
                 }
+                break;
             case 3:
                 switch (c) {
                     case 0:
@@ -141,6 +145,7 @@ public class ObjectFactoryAdapter extends ObjectFactory.Adapter {
                         o = null;
                         break;
                 }
+                break;
             default:
                 o = null;
                 break;
@@ -151,6 +156,7 @@ public class ObjectFactoryAdapter extends ObjectFactory.Adapter {
             o.__unique_id = Game.id_counter;
             Game.id_counter++;
         }
+        Gdx.app.log("ObjectFactoryAdapter", "Created object: " + o);
         return o;
     }
 

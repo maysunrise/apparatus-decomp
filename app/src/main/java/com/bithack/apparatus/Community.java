@@ -22,11 +22,12 @@ public class Community {
 
         /* JADX INFO: Access modifiers changed from: protected */
         @Override // android.os.AsyncTask
-        public String doInBackground(String... params) throws IllegalStateException, NoSuchAlgorithmException, IOException, KeyStoreException, CertificateException {
-            HttpClient client = PublishDialog.HttpUtils.getNewHttpClient();
-            HttpGet req = new HttpGet("http://apparatus-web.voxelmanip.se/internal/fetch.php?t=" + params[0] + "&m=" + params[1] + "&s=" + params[2]);
+        public String doInBackground(String... params) throws IllegalStateException {
             String result = "";
             try {
+                HttpClient client = PublishDialog.HttpUtils.getNewHttpClient();
+                HttpGet req = new HttpGet("http://apparatus-web.voxelmanip.se/internal/fetch.php?t=" + params[0] + "&m=" + params[1] + "&s=" + params[2]);
+
                 HttpResponse res = client.execute(req);
                 InputStream in = res.getEntity().getContent();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(in));

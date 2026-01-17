@@ -72,11 +72,12 @@ public class LoginDialog {
 
         /* JADX INFO: Access modifiers changed from: protected */
         @Override // android.os.AsyncTask
-        public String doInBackground(String... params) throws IllegalStateException, NoSuchAlgorithmException, IOException, KeyStoreException, CertificateException {
-            HttpClient client = PublishDialog.HttpUtils.getNewHttpClient();
-            HttpGet req = new HttpGet("http://apparatus-web.voxelmanip.se/internal/login2.php?u=" + params[0] + "&p=" + params[1]);
+        public String doInBackground(String... params) throws IllegalStateException {
             String result = "";
             try {
+                HttpClient client = PublishDialog.HttpUtils.getNewHttpClient();
+            HttpGet req = new HttpGet("http://apparatus-web.voxelmanip.se/internal/login2.php?u=" + params[0] + "&p=" + params[1]);
+
                 HttpResponse res = client.execute(req);
                 InputStream in = res.getEntity().getContent();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(in));

@@ -25,7 +25,9 @@ public class RotorWidget extends Widget {
     }
 
     private void set(int x, int y) {
-        float l = (float) Math.sqrt((r9 * r9) + (r10 * r10));
+		int x2 = x - 32;
+		int y2 = y - 32;
+		float l = (float) Math.sqrt((double) ((float) ((x2 * x2) + (y2 * y2))));
         float fx = (x - 32) / l;
         float fy = (y - 32) / l;
         this.value = (float) Math.atan2(fy, fx);

@@ -52,17 +52,17 @@ public class CommunityActivity extends Activity {
                 Uri uri = Uri.parse(url);
                 if (url.substring(0, 12).equals("apparatus://")) {
                     if (url.equals("apparatus://register")) {
-                        this.showDialog(0);
+                        CommunityActivity.this.showDialog(0);
                     } else if (url.equals("apparatus://login")) {
-                        this.showDialog(1);
+                        CommunityActivity.this.showDialog(1);
                     } else {
                         int id = Integer.parseInt(url.substring(12), 10);
                         Intent i = new Intent(CommunityActivity.this, (Class<?>) ApparatusApplication.class);
                         i.putExtra("id", id);
                         CommunityActivity.this.webview.saveState(CommunityActivity.this.bundle);
                         Settings.set("c_url", CommunityActivity.this.webview.getUrl());
-                        this.startActivity(i);
-                        this.finish();
+                        CommunityActivity.this.startActivity(i);
+                        CommunityActivity.this.finish();
                     }
                 } else if (uri.getHost().equals("apparatus-web.voxelmanip.se")) {
                     view.loadUrl(url);
@@ -75,13 +75,13 @@ public class CommunityActivity extends Activity {
 
             @Override // android.webkit.WebViewClient
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                this.showDialog(3);
+                CommunityActivity.this.showDialog(3);
             }
 
             @Override // android.webkit.WebViewClient
             public void onPageFinished(WebView view, String url) {
                 try {
-                    this.dismissDialog(3);
+                    CommunityActivity.this.dismissDialog(3);
                 } catch (Exception e) {
                 }
             }
@@ -89,13 +89,13 @@ public class CommunityActivity extends Activity {
             @Override // android.webkit.WebViewClient
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                 try {
-                    this.dismissDialog(3);
+                    CommunityActivity.this.dismissDialog(3);
                 } catch (Exception e) {
                 }
-                Toast.makeText(this, L.get("error_connecting_to_community_server"), 1).show();
+                Toast.makeText(CommunityActivity.this, L.get("error_connecting_to_community_server"), 1).show();
                 CommunityActivity.this.webview.loadData("", "text/html", "utf8");
                 System.gc();
-                this.finish();
+                CommunityActivity.this.finish();
             }
         });
         String url = Settings.get("c_url");
@@ -146,7 +146,7 @@ public class CommunityActivity extends Activity {
                                 ApparatusApp.instance.open_mainmenu();
                                 ApparatusApp.instance.fade = 0.0f;
                                 Settings.set("c_url", CommunityActivity.this.webview.getUrl());
-                                this.finish();
+                                CommunityActivity.this.finish();
                                 break;
                             case 1:
                                 Settings.save();
@@ -155,7 +155,7 @@ public class CommunityActivity extends Activity {
                                 CommunityActivity.this.webview.clearHistory();
                                 CommunityActivity.this.webview.clearView();
                                 Settings.set("c_url", CommunityActivity.this.webview.getUrl());
-                                this.moveTaskToBack(true);
+                                CommunityActivity.this.moveTaskToBack(true);
                                 break;
                         }
                     }

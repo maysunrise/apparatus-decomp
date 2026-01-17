@@ -274,7 +274,6 @@ public class ApparatusApplication extends AndroidApplication implements Apparatu
                                     ApparatusApplication.this.self.showDialog(2);
                                     break;
                                 }
-                                break;
                             case 4:
                                 ApparatusApplication.this.run_on_gl_thread(new Runnable() { // from class: com.bithack.apparatus.ApparatusApplication.4.4
                                     @Override // java.lang.Runnable
@@ -672,7 +671,7 @@ public class ApparatusApplication extends AndroidApplication implements Apparatu
         runOnUiThread(new Runnable() { // from class: com.bithack.apparatus.ApparatusApplication.23
             @Override // java.lang.Runnable
             public void run() {
-                this.showDialog(5);
+                ApparatusApplication.this.showDialog(5);
             }
         });
     }
@@ -682,7 +681,7 @@ public class ApparatusApplication extends AndroidApplication implements Apparatu
         runOnUiThread(new Runnable() { // from class: com.bithack.apparatus.ApparatusApplication.24
             @Override // java.lang.Runnable
             public void run() {
-                this.showDialog(0);
+                ApparatusApplication.this.showDialog(0);
             }
         });
     }
@@ -692,7 +691,7 @@ public class ApparatusApplication extends AndroidApplication implements Apparatu
         runOnUiThread(new Runnable() { // from class: com.bithack.apparatus.ApparatusApplication.25
             @Override // java.lang.Runnable
             public void run() {
-                this.showDialog(1);
+                ApparatusApplication.this.showDialog(1);
             }
         });
     }
@@ -702,7 +701,7 @@ public class ApparatusApplication extends AndroidApplication implements Apparatu
         runOnUiThread(new Runnable() { // from class: com.bithack.apparatus.ApparatusApplication.26
             @Override // java.lang.Runnable
             public void run() {
-                this.showDialog(4);
+                ApparatusApplication.this.showDialog(4);
             }
         });
     }
@@ -713,10 +712,10 @@ public class ApparatusApplication extends AndroidApplication implements Apparatu
             @Override // java.lang.Runnable
             public void run() {
                 try {
-                    this.removeDialog(6);
+                    ApparatusApplication.this.removeDialog(6);
                 } catch (Exception e) {
                 }
-                this.showDialog(6);
+                ApparatusApplication.this.showDialog(6);
             }
         });
     }
@@ -726,7 +725,7 @@ public class ApparatusApplication extends AndroidApplication implements Apparatu
         runOnUiThread(new Runnable() { // from class: com.bithack.apparatus.ApparatusApplication.28
             @Override // java.lang.Runnable
             public void run() {
-                this.showDialog(7);
+                ApparatusApplication.this.showDialog(7);
             }
         });
     }
@@ -736,7 +735,7 @@ public class ApparatusApplication extends AndroidApplication implements Apparatu
         runOnUiThread(new Runnable() { // from class: com.bithack.apparatus.ApparatusApplication.29
             @Override // java.lang.Runnable
             public void run() {
-                this.showDialog(8);
+                ApparatusApplication.this.showDialog(8);
             }
         });
     }
@@ -758,7 +757,7 @@ public class ApparatusApplication extends AndroidApplication implements Apparatu
         /*
             Code decompiled incorrectly, please refer to instructions dump.
         */
-        public String doInBackground(Integer... params) throws IllegalStateException, InterruptedException, IOException {
+        public String doInBackground(Integer... params) throws IllegalStateException {
             final File f = Settings.get_tmp_file();
             try {
                 Gdx.app.log("Community Level Loader", "Downloading http://apparatus-web.voxelmanip.se/levels/" + params[0] + ".jar");
@@ -798,9 +797,9 @@ public class ApparatusApplication extends AndroidApplication implements Apparatu
                         }
                         synchronized (this) {
                             if (_s == 1) {
-                                this.status = 1;
+                                LoadCommunityLevelTask.this.status = 1;
                             } else {
-                                this.status = 2;
+                                LoadCommunityLevelTask.this.status = 2;
                             }
                         }
                     }
@@ -856,7 +855,7 @@ public class ApparatusApplication extends AndroidApplication implements Apparatu
         runOnUiThread(new Runnable() { // from class: com.bithack.apparatus.ApparatusApplication.30
             @Override // java.lang.Runnable
             public void run() {
-                this.showDialog(21);
+                ApparatusApplication.this.showDialog(21);
             }
         });
     }
@@ -866,7 +865,7 @@ public class ApparatusApplication extends AndroidApplication implements Apparatu
         runOnUiThread(new Runnable() { // from class: com.bithack.apparatus.ApparatusApplication.31
             @Override // java.lang.Runnable
             public void run() {
-                this.showDialog(22);
+                ApparatusApplication.this.showDialog(22);
             }
         });
     }
@@ -882,7 +881,7 @@ public class ApparatusApplication extends AndroidApplication implements Apparatu
             @Override // java.lang.Runnable
             public void run() {
                 if (ApparatusApplication.this.info_dialog != null) {
-                    this.removeDialog(15);
+                    ApparatusApplication.this.removeDialog(15);
                 }
                 ApparatusApplication.this.showDialog(15);
             }
@@ -894,7 +893,7 @@ public class ApparatusApplication extends AndroidApplication implements Apparatu
         runOnUiThread(new Runnable() { // from class: com.bithack.apparatus.ApparatusApplication.33
             @Override // java.lang.Runnable
             public void run() {
-                this.showDialog(14);
+                ApparatusApplication.this.showDialog(14);
             }
         });
     }
@@ -904,7 +903,7 @@ public class ApparatusApplication extends AndroidApplication implements Apparatu
         runOnUiThread(new Runnable() { // from class: com.bithack.apparatus.ApparatusApplication.34
             @Override // java.lang.Runnable
             public void run() {
-                this.showDialog(10);
+                ApparatusApplication.this.showDialog(10);
             }
         });
     }
@@ -918,7 +917,7 @@ public class ApparatusApplication extends AndroidApplication implements Apparatu
         runOnUiThread(new Runnable() { // from class: com.bithack.apparatus.ApparatusApplication.35
             @Override // java.lang.Runnable
             public void run() {
-                this.showDialog(17);
+                ApparatusApplication.this.showDialog(17);
             }
         });
     }
@@ -960,7 +959,7 @@ public class ApparatusApplication extends AndroidApplication implements Apparatu
         runOnUiThread(new Runnable() { // from class: com.bithack.apparatus.ApparatusApplication.36
             @Override // java.lang.Runnable
             public void run() {
-                this.showDialog(24);
+                ApparatusApplication.this.showDialog(24);
             }
         });
     }

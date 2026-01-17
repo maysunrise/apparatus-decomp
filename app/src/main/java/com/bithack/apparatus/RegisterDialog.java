@@ -58,11 +58,11 @@ public class RegisterDialog {
 
         /* JADX INFO: Access modifiers changed from: protected */
         @Override // android.os.AsyncTask
-        public String doInBackground(String... params) throws IllegalStateException, NoSuchAlgorithmException, IOException, KeyStoreException, CertificateException {
-            HttpClient client = PublishDialog.HttpUtils.getNewHttpClient();
-            HttpGet req = new HttpGet("http://apparatus-web.voxelmanip.se/internal/register.php?u=" + URLEncoder.encode(params[0]) + "&p=" + URLEncoder.encode(params[1]) + "&pt=" + URLEncoder.encode(params[2]) + "&e=" + URLEncoder.encode(params[3]));
+        public String doInBackground(String... params) throws IllegalStateException {
             String result = "";
             try {
+                HttpClient client = PublishDialog.HttpUtils.getNewHttpClient();
+                HttpGet req = new HttpGet("http://apparatus-web.voxelmanip.se/internal/register.php?u=" + URLEncoder.encode(params[0]) + "&p=" + URLEncoder.encode(params[1]) + "&pt=" + URLEncoder.encode(params[2]) + "&e=" + URLEncoder.encode(params[3]));
                 HttpResponse res = client.execute(req);
                 InputStream in = res.getEntity().getContent();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(in));

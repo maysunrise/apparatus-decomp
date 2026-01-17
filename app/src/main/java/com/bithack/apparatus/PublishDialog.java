@@ -158,103 +158,86 @@ public class PublishDialog {
         protected PublishTask() {
         }
 
-        /* JADX INFO: Access modifiers changed from: protected */
-        /* JADX WARN: Code restructure failed: missing block: B:12:0x002c, code lost:
-
-            com.badlogic.gdx.Gdx.app.log("breaking out", "ksda");
-         */
-        /* JADX WARN: Code restructure failed: missing block: B:20:0x003d, code lost:
-
-            java.lang.Thread.sleep(200);
-         */
-        @Override // android.os.AsyncTask
-        /*
-            Code decompiled incorrectly, please refer to instructions dump.
-        */
-        public String doInBackground(final String... params) throws IllegalStateException, InterruptedException, NoSuchAlgorithmException, IOException, KeyStoreException, CertificateException {
-            PublishDialog.this.activity.run_on_gl_thread(new Runnable() { // from class: com.bithack.apparatus.PublishDialog.PublishTask.1
-                @Override // java.lang.Runnable
-                public void run() throws Exception {
-                    int _s;
-                    InputStream i;
-                    long len;
-                    int read;
-                    Game game = ApparatusApp.game;
-                    game.prepare_save();
-                    game.level.name = params[0];
-                    game.level.description = params[1];
-                    game.level.tags = params[2];
-                    File f = Settings.get_tmp_file();
-                    byte[] data = null;
+        @Override
+        protected String doInBackground(final String... params) {
+            try {
+                PublishDialog.this.activity.run_on_gl_thread(() -> {
                     try {
-                        game.level.save_jar(f);
-                        i = new FileInputStream(f);
-                        len = f.length();
-                    } catch (Exception e) {
-                        _s = 2;
-                    }
-                    if (len > 2147483647L) {
-                        throw new Exception();
-                    }
-                    data = new byte[(int) len];
-                    int offs = 0;
-                    while (offs < data.length && (read = i.read(data, offs, data.length - offs)) >= 0) {
-                        offs += read;
-                    }
-                    i.close();
-                    f.delete();
-                    game.save();
-                    _s = 1;
-                    synchronized (this) {
-                        if (_s == 1 && data != null) {
+                        Game game = ApparatusApp.game;
+                        game.prepare_save();
+                        game.level.name = params[0];
+                        game.level.description = params[1];
+                        game.level.tags = params[2];
+
+                        File tempFile = Settings.get_tmp_file();
+                        game.level.save_jar(tempFile);
+
+                        long fileLength = tempFile.length();
+                        if (fileLength > Integer.MAX_VALUE) {
+                            throw new IOException("File too large to process.");
+                        }
+
+                        byte[] data = new byte[(int) fileLength];
+                        try (InputStream inputStream = new FileInputStream(tempFile)) {
+                            int bytesRead;
+                            int offset = 0;
+                            while (offset < data.length && (bytesRead = inputStream.read(data, offset, data.length - offset)) >= 0) {
+                                offset += bytesRead;
+                            }
+                        }
+
+                        tempFile.delete();
+                        game.save();
+
+                        synchronized (this) {
                             this.level_data = data;
                             this.status = 1;
-                        } else {
+                        }
+                    } catch (Exception e) {
+                        synchronized (this) {
                             this.status = 2;
                         }
                     }
-                }
-            });
-            int x = 0;
-            while (true) {
-                if (x < 1000) {
+                });
+
+                int retries = 0;
+                while (retries < 1000) {
                     synchronized (this) {
                         if (this.status != 0) {
                             break;
                         }
                     }
-                    break;
+                    Thread.sleep(200);
+                    retries++;
                 }
-                break;
-                x++;
-            }
-            String result = "";
-            if (this.status != 1) {
-                return "Interrupted";
-            }
-            HttpClient newHttpClient = HttpUtils.getNewHttpClient();
-            HttpPost req = new HttpPost("http://apparatus-web.voxelmanip.se/internal/upload.php?t=" + Settings.get("community-token"));
-            ByteArrayEntity ent = new ByteArrayEntity(this.level_data);
-            ent.setContentType("binary/octet-stream");
-            req.setEntity(ent);
-            try {
-                HttpResponse res = newHttpClient.execute(req);
-                InputStream in = res.getEntity().getContent();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-                StringBuilder str = new StringBuilder();
-                while (true) {
-                    String data = reader.readLine();
-                    if (data != null) {
-                        str.append(data);
-                    } else {
-                        in.close();
-                        result = str.toString();
-                        return result;
+
+                if (this.status != 1) {
+                    return "Interrupted";
+                }
+
+                HttpClient httpClient = HttpUtils.getNewHttpClient();
+                HttpPost request = new HttpPost("http://apparatus-web.voxelmanip.se/internal/upload.php?t=" + Settings.get("community-token"));
+                ByteArrayEntity entity = new ByteArrayEntity(this.level_data);
+                entity.setContentType("binary/octet-stream");
+                request.setEntity(entity);
+
+                try {
+                    HttpResponse response = httpClient.execute(request);
+                    try (BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()))) {
+                        StringBuilder resultBuilder = new StringBuilder();
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            resultBuilder.append(line);
+                        }
+                        return resultBuilder.toString();
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return "";
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                return result;
+                return "Error occurred during publishing.";
             }
         }
 

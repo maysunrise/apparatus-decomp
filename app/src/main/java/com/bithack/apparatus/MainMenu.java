@@ -94,8 +94,8 @@ public class MainMenu extends Screen implements InputProcessor {
 
     @Override // com.badlogic.gdx.InputProcessor
     public boolean touchDown(int x, int y, int pointer, int btn) {
-        float px = x / G.realwidth;
-        float py = y / G.realheight;
+		float px = ((float) x) / ((float) G.realwidth);
+		float py = ((float) y) / ((float) G.realheight);
         Gdx.app.log("px,py", String.valueOf(px) + " " + py + " " + G.realwidth + " " + G.realheight);
         if (px > 0.75f && py < 0.11f) {
             if (px > 0.93f) {
