@@ -1,0 +1,41 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+	namespace "com.bithack.apparatus"
+	compileSdk 35
+
+    defaultConfig {
+		minSdk 14
+		targetSdk 35
+        versionCode 41
+        versionName "1.2.2 Beta 3"
+        useLibrary 'org.apache.http.legacy'
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    buildFeatures {
+        buildConfig = false
+    }
+}
+
+dependencies {
+	implementation files('libs.jar')
+	implementation 'com.android.support:support-v4:23.+'
+}
