@@ -239,8 +239,6 @@ public class ObjectManager {
             layer.weights.remove(o);
         } else if (o instanceof DynamicMotor) {
             layer.dynamicmotors.remove(o);
-        } else if (o instanceof Weight) {
-            layer.weights.remove(o);
         } else if (o instanceof Battery) {
             layer.batteries.remove(o);
         } else if (o instanceof Mine) {
@@ -254,9 +252,7 @@ public class ObjectManager {
     }
 
     public GrabableObject find(int id) {
-        Iterator<GrabableObject> it = this.all.iterator();
-        while (it.hasNext()) {
-            GrabableObject o = it.next();
+        for (GrabableObject o : this.all) {
             if (o.__unique_id == id) {
                 return o;
             }

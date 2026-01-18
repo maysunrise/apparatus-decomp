@@ -48,7 +48,7 @@ public class LoadingScreen extends Screen {
             G.gl.glBlendFunc(770, 771);
             G.gl.glEnable(3553);
             G.cam_p.apply(G.gl);
-            G.gl.glTranslatef(G.width / 2, G.height / 2, 0.0f);
+            G.gl.glTranslatef((float) G.width / 2, (float) G.height / 2, 0.0f);
             G.gl.glScalef(256.0f, 256.0f, 1.0f);
             this.loadingtxt.bind();
             MiscRenderer.draw_textured_box();
@@ -95,7 +95,7 @@ public class LoadingScreen extends Screen {
             G.gl.glBlendFunc(770, 771);
             G.gl.glEnable(3553);
             G.cam_p.apply(G.gl);
-            G.gl.glTranslatef(G.width / 2, G.height / 2, 0.0f);
+            G.gl.glTranslatef((float) G.width / 2, (float) G.height / 2, 0.0f);
             G.gl.glScalef(256.0f, 256.0f, 1.0f);
             this.loadingtxt.bind();
             MiscRenderer.draw_textured_box();
@@ -105,7 +105,7 @@ public class LoadingScreen extends Screen {
         G.gl.glBlendFunc(770, 771);
         G.gl.glEnable(3553);
         G.cam_p.apply(G.gl);
-        G.gl.glTranslatef(G.width / 2, G.height / 2, 0.0f);
+        G.gl.glTranslatef((float) G.width / 2, (float) G.height / 2, 0.0f);
         G.gl.glScalef(256.0f, 256.0f, 1.0f);
         this.loadingtxt.bind();
         MiscRenderer.draw_textured_box();

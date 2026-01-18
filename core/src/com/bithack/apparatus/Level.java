@@ -216,11 +216,6 @@ public class Level {
         this.challenge = true;
         this.num_planks = 0;
         this.num_wheels = 0;
-        this.name = "";
-        this.description = "";
-        this.tags = "";
-        this.community_id = "";
-        this.type = "challenge";
         version = 8;
         this.world = world;
     }

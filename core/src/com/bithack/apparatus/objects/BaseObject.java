@@ -209,36 +209,33 @@ public abstract class BaseObject {
         s.write(b);
         BinaryIO.write_float(s, this.scale);
         s.write(this.layer);
-        if (this.properties.length > 0) {
-            for (Property p : this.properties) {
-                byte[] bname = p.name.getBytes();
-                BinaryIO.write_int(s, bname.length);
-                s.write(bname);
-                switch ($SWITCH_TABLE$com$bithack$apparatus$objects$BaseObject$Property$Type()[p.type.ordinal()]) {
-                    case 2:
+        for (Property p : this.properties) {
+            byte[] bname = p.name.getBytes();
+            BinaryIO.write_int(s, bname.length);
+            s.write(bname);
+            switch ($SWITCH_TABLE$com$bithack$apparatus$objects$BaseObject$Property$Type()[p.type.ordinal()]) {
+                case 2:
+                    s.write(1);
+                    BinaryIO.write_int(s, (Integer) p.value);
+                    break;
+                case 3:
+                    s.write(2);
+                    if (((Boolean) p.value).equals(Boolean.TRUE)) {
                         s.write(1);
-                        BinaryIO.write_int(s, ((Integer) p.value).intValue());
-                        break;
-                    case 3:
-                        s.write(2);
-                        if (((Boolean) p.value).equals(Boolean.TRUE)) {
-                            s.write(1);
-                            break;
-                        } else {
-                            s.write(0);
-                            break;
-                        }
-                    case 4:
-                        s.write(3);
-                        BinaryIO.write_float(s, ((Float) p.value).floatValue());
-                        break;
-                    default:
+                    } else {
                         s.write(0);
-                        byte[] strb = ((String) p.value).getBytes();
-                        BinaryIO.write_int(s, strb.length);
-                        s.write(strb);
-                        break;
-                }
+                    }
+                    break;
+                case 4:
+                    s.write(3);
+                    BinaryIO.write_float(s, (Float) p.value);
+                    break;
+                default:
+                    s.write(0);
+                    byte[] strb = ((String) p.value).getBytes();
+                    BinaryIO.write_int(s, strb.length);
+                    s.write(strb);
+                    break;
             }
         }
     }

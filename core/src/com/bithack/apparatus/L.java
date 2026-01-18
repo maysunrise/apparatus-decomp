@@ -11,8 +11,7 @@ import java.util.Map;
 
 /* loaded from: classes.dex */
 public class L {
-    protected static Map<String, String> strings = new HashMap();
-    private static Map<String, String> fallback = new HashMap();
+    protected static Map<String, String> strings = new HashMap<>();
 
     static {
         strings.put("mainmenu", "Main Menu");

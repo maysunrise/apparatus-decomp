@@ -292,7 +292,7 @@ public class Panel extends GrabableObject implements FreeObject, WidgetValueCall
 
     @Override // com.bithack.apparatus.objects.BaseObject
     public void update_properties() {
-        super.set_property("type", new Integer(this.type));
+        super.set_property("type", this.type);
     }
 
     @Override // com.bithack.apparatus.objects.BaseObject

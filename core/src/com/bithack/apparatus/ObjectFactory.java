@@ -15,10 +15,6 @@ import java.io.InputStream;
 
 /* loaded from: classes.dex */
 public class ObjectFactory {
-    public static final short MASKBIT_ENEMY = 4;
-    public static final short MASKBIT_OBJECT = 1;
-    public static final short MASKBIT_PLAYER = 2;
-    public static final short MASKBIT_TILES = 8;
     private static BodyDef _anchor_bd;
     private static FixtureDef _anchor_fd;
     private static BodyDef _bd;
@@ -160,18 +156,17 @@ public class ObjectFactory {
                                         value = new String(bval);
                                         break;
                                     case 1:
-                                        value = new Integer(BinaryIO.read_int(testx));
+                                        value = BinaryIO.read_int(testx);
                                         break;
                                     case 2:
                                         if (testx.read() != 1) {
                                             value = Boolean.FALSE;
-                                            break;
                                         } else {
                                             value = Boolean.TRUE;
-                                            break;
                                         }
+                                        break;
                                     case 3:
-                                        value = new Float(BinaryIO.read_float(testx));
+                                        value = BinaryIO.read_float(testx);
                                         break;
                                     default:
                                         error = true;

@@ -345,9 +345,7 @@ public class IlluminationManager {
         G.gl.glColor4f(0.39999998f, 0.39999998f, 0.39999998f, 1.0f);
         G.gl.glDisable(3553);
         plank_umbra.bind();
-        Iterator<Plank> it = om.layer0.planks.iterator();
-        while (it.hasNext()) {
-            Plank w = it.next();
+        for (Plank w : om.layer0.planks) {
             if (!w.culled) {
                 int start = (w.size.x < 2.1f ? 0 : w.size.x < 4.1f ? 1 : 2) * 4;
                 Vector2 pos = w.get_state().position;
@@ -358,9 +356,7 @@ public class IlluminationManager {
                 G.gl.glPopMatrix();
             }
         }
-        Iterator<Plank> it2 = om.layer1.planks.iterator();
-        while (it2.hasNext()) {
-            Plank w2 = it2.next();
+        for (Plank w2 : om.layer1.planks) {
             if (!w2.culled) {
                 int start2 = (w2.size.x < 2.1f ? 0 : w2.size.x < 4.1f ? 1 : 2) * 4;
                 Vector2 pos2 = w2.get_state().position;
@@ -372,9 +368,7 @@ public class IlluminationManager {
             }
         }
         marble_umbra.bind();
-        Iterator<Marble> it3 = om.layer0.marbles.iterator();
-        while (it3.hasNext()) {
-            Marble w3 = it3.next();
+        for (Marble w3 : om.layer0.marbles) {
             if (!w3.culled) {
                 Vector2 pos3 = w3.get_state().position;
                 G.gl.glPushMatrix();
@@ -383,9 +377,7 @@ public class IlluminationManager {
                 G.gl.glPopMatrix();
             }
         }
-        Iterator<Marble> it4 = om.layer1.marbles.iterator();
-        while (it4.hasNext()) {
-            Marble w4 = it4.next();
+        for (Marble w4 : om.layer1.marbles) {
             if (!w4.culled) {
                 Vector2 pos4 = w4.get_state().position;
                 G.gl.glPushMatrix();
@@ -395,17 +387,13 @@ public class IlluminationManager {
             }
         }
         wheel_umbra.bind();
-        Iterator<Rope> it5 = om.ropes.iterator();
-        while (it5.hasNext()) {
-            Rope w5 = it5.next();
+        for (Rope w5 : om.ropes) {
             if (!w5.culled) {
                 render_projected_ropeend_umbra((RopeEnd) w5.g1);
                 render_projected_ropeend_umbra((RopeEnd) w5.g2);
             }
         }
-        Iterator<MetalWheel> it6 = om.layer0.metalwheels.iterator();
-        while (it6.hasNext()) {
-            Wheel w6 = it6.next();
+        for (MetalWheel w6 : om.layer0.metalwheels) {
             if (!w6.culled) {
                 int start3 = (w6.size < 1.0f ? 0 : w6.size < 2.0f ? 1 : 2) * 25;
                 Vector2 pos5 = w6.get_state().position;
@@ -415,9 +403,7 @@ public class IlluminationManager {
                 G.gl.glPopMatrix();
             }
         }
-        Iterator<MetalWheel> it7 = om.layer1.metalwheels.iterator();
-        while (it7.hasNext()) {
-            Wheel w7 = it7.next();
+        for (MetalWheel w7 : om.layer1.metalwheels) {
             if (!w7.culled) {
                 int start4 = (w7.size < 1.0f ? 0 : w7.size < 2.0f ? 1 : 2) * 25;
                 Vector2 pos6 = w7.get_state().position;
@@ -427,9 +413,7 @@ public class IlluminationManager {
                 G.gl.glPopMatrix();
             }
         }
-        Iterator<Wheel> it8 = om.layer0.wheels.iterator();
-        while (it8.hasNext()) {
-            Wheel w8 = it8.next();
+        for (Wheel w8 : om.layer0.wheels) {
             if (!w8.culled) {
                 int start5 = (w8.size < 1.0f ? 0 : w8.size < 2.0f ? 1 : 2) * 25;
                 Vector2 pos7 = w8.get_state().position;
@@ -439,9 +423,7 @@ public class IlluminationManager {
                 G.gl.glPopMatrix();
             }
         }
-        Iterator<Wheel> it9 = om.layer1.wheels.iterator();
-        while (it9.hasNext()) {
-            Wheel w9 = it9.next();
+        for (Wheel w9 : om.layer1.wheels) {
             if (!w9.culled) {
                 int start6 = (w9.size < 1.0f ? 0 : w9.size < 2.0f ? 1 : 2) * 25;
                 Vector2 pos8 = w9.get_state().position;
@@ -451,9 +433,7 @@ public class IlluminationManager {
                 G.gl.glPopMatrix();
             }
         }
-        Iterator<Knob> it10 = om.layer0.knobs.iterator();
-        while (it10.hasNext()) {
-            Knob w10 = (Knob) it10.next();
+        for (Knob w10 : om.layer0.knobs) {
             if (!w10.culled) {
                 int start7 = (w10.size < 1.0f ? 0 : w10.size < 2.0f ? 1 : 2) * 25;
                 Vector2 pos9 = w10.get_state().position;
@@ -463,9 +443,7 @@ public class IlluminationManager {
                 G.gl.glPopMatrix();
             }
         }
-        Iterator<Knob> it11 = om.layer1.knobs.iterator();
-        while (it11.hasNext()) {
-            Knob w11 = it11.next();
+        for (Knob w11 : om.layer1.knobs) {
             if (!w11.culled) {
                 int start8 = (w11.size < 1.0f ? 0 : w11.size < 2.0f ? 1 : 2) * 25;
                 Vector2 pos10 = w11.get_state().position;
@@ -476,9 +454,7 @@ public class IlluminationManager {
             }
         }
         misc_umbra.bind();
-        Iterator<DynamicMotor> it12 = om.layer0.dynamicmotors.iterator();
-        while (it12.hasNext()) {
-            DynamicMotor m = it12.next();
+        for (DynamicMotor m : om.layer0.dynamicmotors) {
             if (!m.culled) {
                 Vector2 pos11 = m.get_state().position;
                 G.gl.glPushMatrix();
@@ -489,9 +465,7 @@ public class IlluminationManager {
                 G.gl.glPopMatrix();
             }
         }
-        Iterator<DynamicMotor> it13 = om.layer1.dynamicmotors.iterator();
-        while (it13.hasNext()) {
-            DynamicMotor m2 = it13.next();
+        for (DynamicMotor m2 : om.layer1.dynamicmotors) {
             if (!m2.culled) {
                 Vector2 pos12 = m2.get_state().position;
                 G.gl.glPushMatrix();
@@ -502,9 +476,7 @@ public class IlluminationManager {
                 G.gl.glPopMatrix();
             }
         }
-        Iterator<Panel> it14 = om.layer0.controllers.iterator();
-        while (it14.hasNext()) {
-            Panel m3 = it14.next();
+        for (Panel m3 : om.layer0.controllers) {
             if (!m3.culled) {
                 Vector2 pos13 = m3.get_state().position;
                 G.gl.glPushMatrix();
@@ -515,9 +487,7 @@ public class IlluminationManager {
                 G.gl.glPopMatrix();
             }
         }
-        Iterator<Battery> it15 = om.layer0.batteries.iterator();
-        while (it15.hasNext()) {
-            Battery b = it15.next();
+        for (Battery b : om.layer0.batteries) {
             if (!b.culled) {
                 Vector2 pos14 = b.get_state().position;
                 G.gl.glPushMatrix();
@@ -531,9 +501,7 @@ public class IlluminationManager {
                 G.gl.glPopMatrix();
             }
         }
-        Iterator<Weight> it16 = om.layer0.weights.iterator();
-        while (it16.hasNext()) {
-            Weight b2 = it16.next();
+        for (Weight b2 : om.layer0.weights) {
             if (!b2.culled) {
                 Vector2 pos15 = b2.get_state().position;
                 G.gl.glPushMatrix();
@@ -543,9 +511,7 @@ public class IlluminationManager {
                 G.gl.glPopMatrix();
             }
         }
-        Iterator<Mine> it17 = om.layer0.mines.iterator();
-        while (it17.hasNext()) {
-            Mine b3 = it17.next();
+        for (Mine b3 : om.layer0.mines) {
             if (!b3.culled && !b3.triggered) {
                 Vector2 pos16 = b3.get_state().position;
                 G.gl.glPushMatrix();
@@ -556,9 +522,7 @@ public class IlluminationManager {
                 G.gl.glPopMatrix();
             }
         }
-        Iterator<Mine> it18 = om.layer1.mines.iterator();
-        while (it18.hasNext()) {
-            Mine b4 = it18.next();
+        for (Mine b4 : om.layer1.mines) {
             if (!b4.culled && !b4.triggered) {
                 Vector2 pos17 = b4.get_state().position;
                 G.gl.glPushMatrix();
@@ -569,9 +533,7 @@ public class IlluminationManager {
                 G.gl.glPopMatrix();
             }
         }
-        Iterator<Bucket> it19 = om.layer0.buckets.iterator();
-        while (it19.hasNext()) {
-            Bucket b5 = it19.next();
+        for (Bucket b5 : om.layer0.buckets) {
             if (!b5.culled) {
                 Vector2 pos18 = b5.get_state().position;
                 G.gl.glPushMatrix();
@@ -585,9 +547,7 @@ public class IlluminationManager {
         misc_umbra.unbind();
         metal_umbra.bind();
         if (om.layer1.bars.size() > 0) {
-            Iterator<MetalBar> it20 = om.layer1.bars.iterator();
-            while (it20.hasNext()) {
-                MetalBar m4 = it20.next();
+            for (MetalBar m4 : om.layer1.bars) {
                 if (!m4.culled) {
                     int start9 = (m4.size.x < 2.1f ? 0 : m4.size.x < 4.1f ? 1 : 2) * 4;
                     Vector2 pos19 = m4.get_state().position;
@@ -599,9 +559,7 @@ public class IlluminationManager {
                 }
             }
         }
-        Iterator<Damper> it21 = om.layer1.dampers.iterator();
-        while (it21.hasNext()) {
-            Damper w12 = it21.next();
+        for (Damper w12 : om.layer1.dampers) {
             Gdx.app.log("render", "dsdsa");
             if (!w12.culled) {
                 Gdx.app.log("render", "dsdsa");
@@ -708,17 +666,13 @@ public class IlluminationManager {
             }
         }
         wheel_umbra.bind();
-        Iterator<Rope> it5 = om.ropes.iterator();
-        while (it5.hasNext()) {
-            Rope w5 = it5.next();
+        for (Rope w5 : om.ropes) {
             if (!w5.culled) {
                 render_projected_ropeend_umbra((RopeEnd) w5.g1);
                 render_projected_ropeend_umbra((RopeEnd) w5.g2);
             }
         }
-        Iterator<MetalWheel> it6 = om.layer0.metalwheels.iterator();
-        while (it6.hasNext()) {
-            Wheel w6 = it6.next();
+        for (Wheel w6 : om.layer0.metalwheels) {
             if (!w6.culled) {
                 int start3 = (w6.size < 1.0f ? 0 : w6.size < 2.0f ? 1 : 2) * 25;
                 Vector2 pos5 = w6.get_state().position;
@@ -734,9 +688,7 @@ public class IlluminationManager {
                 G.gl.glPopMatrix();
             }
         }
-        Iterator<MetalWheel> it7 = om.layer1.metalwheels.iterator();
-        while (it7.hasNext()) {
-            Wheel w7 = it7.next();
+        for (Wheel w7 : om.layer1.metalwheels) {
             if (!w7.culled) {
                 int start4 = (w7.size < 1.0f ? 0 : w7.size < 2.0f ? 1 : 2) * 25;
                 Vector2 pos6 = w7.get_state().position;
@@ -752,9 +704,7 @@ public class IlluminationManager {
                 G.gl.glPopMatrix();
             }
         }
-        Iterator<Wheel> it8 = om.layer0.wheels.iterator();
-        while (it8.hasNext()) {
-            Wheel w8 = it8.next();
+        for (Wheel w8 : om.layer0.wheels) {
             if (!w8.culled) {
                 int start5 = (w8.size < 1.0f ? 0 : w8.size < 2.0f ? 1 : 2) * 25;
                 Vector2 pos7 = w8.get_state().position;

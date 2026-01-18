@@ -155,19 +155,19 @@ public abstract class BaseMotor extends JointObject {
     @Override // com.bithack.apparatus.objects.BaseObject
     public void set_property(String name, Object value) {
         if (name.equals("oid")) {
-            this.attached_id = ((Integer) value).intValue();
+            this.attached_id = (Integer) value;
         } else if (name.equals("attached")) {
-            this.attached = ((Boolean) value).booleanValue();
+            this.attached = (Boolean) value;
         } else if (name.equals("dir")) {
-            this.dir = ((Float) value).floatValue();
+            this.dir = (Float) value;
         }
         super.set_property(name, value);
     }
 
     @Override // com.bithack.apparatus.objects.BaseObject
     public void update_properties() {
-        set_property("oid", new Integer(this.attached_id));
-        set_property("dir", new Float(this.dir));
+        set_property("oid", this.attached_id);
+        set_property("dir", this.dir);
         set_property("attached", this.attached ? Boolean.TRUE : Boolean.FALSE);
     }
 

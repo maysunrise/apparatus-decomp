@@ -10,6 +10,8 @@ import com.bithack.apparatus.objects.Marble;
 import com.bithack.apparatus.objects.Plank;
 import com.bithack.apparatus.objects.RocketEngine;
 import com.bithack.apparatus.objects.Wheel;
+
+import java.util.Arrays;
 import java.util.Random;
 
 /* loaded from: classes.dex */
@@ -123,19 +125,19 @@ public class SoundManager {
             if (snd_rocket_thrust != null) {
                 snd_rocket_thrust.dispose();
             }
-            for (int x = 0; x < snd_gift_hit.length; x++) {
-                if (snd_gift_hit[x] != null) {
-                    snd_gift_hit[x].dispose();
+            for (Sound value : snd_gift_hit) {
+                if (value != null) {
+                    value.dispose();
                 }
             }
-            for (int x2 = 0; x2 < snd_explosion.length; x2++) {
-                if (snd_explosion[x2] != null) {
-                    snd_explosion[x2].dispose();
+            for (Sound sound : snd_explosion) {
+                if (sound != null) {
+                    sound.dispose();
                 }
             }
-            for (int x3 = 0; x3 < snd_wood_hit.length; x3++) {
-                if (snd_wood_hit[x3] != null) {
-                    snd_wood_hit[x3].dispose();
+            for (Sound sound : snd_wood_hit) {
+                if (sound != null) {
+                    sound.dispose();
                 }
             }
             if (snd_battery_switch != null) {
@@ -152,15 +154,9 @@ public class SoundManager {
             snd_hammer = null;
             snd_rocket_launch = null;
             snd_rocket_thrust = null;
-            for (int x4 = 0; x4 < snd_wood_hit.length; x4++) {
-                snd_wood_hit[x4] = null;
-            }
-            for (int x5 = 0; x5 < snd_gift_hit.length; x5++) {
-                snd_gift_hit[x5] = null;
-            }
-            for (int x6 = 0; x6 < snd_explosion.length; x6++) {
-                snd_explosion[x6] = null;
-            }
+            Arrays.fill(snd_wood_hit, null);
+            Arrays.fill(snd_gift_hit, null);
+            Arrays.fill(snd_explosion, null);
             snd_marble_roll = null;
             snd_battery_switch = null;
             music = null;

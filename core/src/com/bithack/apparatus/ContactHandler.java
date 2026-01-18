@@ -431,8 +431,7 @@ public class ContactHandler implements ContactListener, ContactFilter {
 
         private Vector2 intersect_rengine_plank(RocketEngine ga, Plank gb) {
             ContactHandler.tmp2.set(0.0f, 1.25f);
-            Vector2 r = query_intersection_point(ga.body.getWorldPoint(ContactHandler.tmp2));
-            return r;
+            return query_intersection_point(ga.body.getWorldPoint(ContactHandler.tmp2));
         }
 
         private Vector2 intersect_hub_plank(Hub ga, Plank gb) {
@@ -551,10 +550,12 @@ public class ContactHandler implements ContactListener, ContactFilter {
             if (discriminant < 0.0f) {
                 return null;
             }
-            float x1 = ((float) ((D * dy) + ((Math.signum(dy) * dx) * Math.sqrt(discriminant)))) / (dr * dr);
-            float y1 = ((float) (((-D) * dx) + (Math.abs(dy) * Math.sqrt(discriminant)))) / (dr * dr);
-            float x2 = ((float) ((D * dy) - ((Math.signum(dy) * dx) * Math.sqrt(discriminant)))) / (dr * dr);
-            float y2 = ((float) (((-D) * dx) - (Math.abs(dy) * Math.sqrt(discriminant)))) / (dr * dr);
+            double v = (Math.signum(dy) * dx) * Math.sqrt(discriminant);
+            double v1 = Math.abs(dy) * Math.sqrt(discriminant);
+            float x1 = ((float) ((D * dy) + v)) / (dr * dr);
+            float y1 = ((float) (((-D) * dx) + v1)) / (dr * dr);
+            float x2 = ((float) ((D * dy) - v)) / (dr * dr);
+            float y2 = ((float) (((-D) * dx) - v1)) / (dr * dr);
             tmp.set(x1, y1);
             if (tmp.dst(x2, y2) < 1.5f) {
                 return iresult.set((0.9f * x2) + sc.x, (0.9f * y2) + sc.y).add((0.9f * x1) + sc.x, (0.9f * y1) + sc.y).mul(0.5f);

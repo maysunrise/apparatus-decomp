@@ -100,7 +100,18 @@ public class Damper extends GrabableObject {
         this.size = 2.0f;
         this.world = world;
         create_ends(world);
-        this.properties = new BaseObject.Property[]{new BaseObject.Property("e1x", BaseObject.Property.Type.FLOAT, new Float(0.0f)), new BaseObject.Property("e1y", BaseObject.Property.Type.FLOAT, new Float(0.0f)), new BaseObject.Property("e2x", BaseObject.Property.Type.FLOAT, new Float(0.0f)), new BaseObject.Property("e2y", BaseObject.Property.Type.FLOAT, new Float(0.0f)), new BaseObject.Property("e1a", BaseObject.Property.Type.FLOAT, new Float(0.0f)), new BaseObject.Property("e2a", BaseObject.Property.Type.FLOAT, new Float(0.0f)), new BaseObject.Property("e1id", BaseObject.Property.Type.INT, new Integer(0)), new BaseObject.Property("e2id", BaseObject.Property.Type.INT, new Integer(0)), new BaseObject.Property("force", BaseObject.Property.Type.FLOAT, new Float(100.0f)), new BaseObject.Property("speed", BaseObject.Property.Type.FLOAT, new Float(50.0f)), new BaseObject.Property("size", BaseObject.Property.Type.FLOAT, new Float(size))};
+        this.properties = new BaseObject.Property[]{
+            new BaseObject.Property("e1x", BaseObject.Property.Type.FLOAT, new Float(0.0f)),
+            new BaseObject.Property("e1y", BaseObject.Property.Type.FLOAT, new Float(0.0f)),
+            new BaseObject.Property("e2x", BaseObject.Property.Type.FLOAT, new Float(0.0f)),
+            new BaseObject.Property("e2y", BaseObject.Property.Type.FLOAT, new Float(0.0f)),
+            new BaseObject.Property("e1a", BaseObject.Property.Type.FLOAT, new Float(0.0f)),
+            new BaseObject.Property("e2a", BaseObject.Property.Type.FLOAT, new Float(0.0f)),
+            new BaseObject.Property("e1id", BaseObject.Property.Type.INT, new Integer(0)),
+            new BaseObject.Property("e2id", BaseObject.Property.Type.INT, new Integer(0)),
+            new BaseObject.Property("force", BaseObject.Property.Type.FLOAT, new Float(100.0f)),
+            new BaseObject.Property("speed", BaseObject.Property.Type.FLOAT, new Float(50.0f)),
+            new BaseObject.Property("size", BaseObject.Property.Type.FLOAT, new Float(size))};
         this.fixed_rotation = true;
         create_ropejoint();
     }

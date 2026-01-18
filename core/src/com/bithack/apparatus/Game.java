@@ -15,7 +15,6 @@ import com.badlogic.gdx.math.Plane;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
-import com.badlogic.gdx.net.HttpStatus;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -35,8 +34,6 @@ import com.badlogic.gdx.physics.box2d.joints.MouseJointDef;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.BufferUtils;
-import com.bithack.apparatus.ContactHandler;
-import com.bithack.apparatus.ObjectManager;
 import com.bithack.apparatus.graphics.G;
 import com.bithack.apparatus.graphics.MiscRenderer;
 import com.bithack.apparatus.graphics.Pipeline;
@@ -416,38 +413,30 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
         this.menu_cache = new SpriteCache();
         generate_caches();
         this.widgets = new WidgetManager("uicontrols.png", this);
-        WidgetManager widgetManager = this.widgets;
         HorizontalSliderWidget horizontalSliderWidget = new HorizontalSliderWidget(0, 180, 1.0f);
         this.widget_size = horizontalSliderWidget;
-        widgetManager.add_widget(horizontalSliderWidget, G.width - 320, G.height - 48);
-        WidgetManager widgetManager2 = this.widgets;
+        this.widgets.add_widget(horizontalSliderWidget, G.width - 320, G.height - 48);
         HorizontalSliderWidget horizontalSliderWidget2 = new HorizontalSliderWidget(7, 64, 1.0f);
         this.widget_elasticity = horizontalSliderWidget2;
-        widgetManager2.add_widget(horizontalSliderWidget2, (G.width - 320) - 100, G.height - 48);
-        WidgetManager widgetManager3 = this.widgets;
+        this.widgets.add_widget(horizontalSliderWidget2, (G.width - 320) - 100, G.height - 48);
         HorizontalSliderWidget horizontalSliderWidget3 = new HorizontalSliderWidget(2, 180);
         this.widget_current = horizontalSliderWidget3;
-        widgetManager3.add_widget(horizontalSliderWidget3, G.width - 256, G.height - 48);
-        WidgetManager widgetManager4 = this.widgets;
+        this.widgets.add_widget(horizontalSliderWidget3, G.width - 256, G.height - 48);
         HorizontalSliderWidget horizontalSliderWidget4 = new HorizontalSliderWidget(1, 180);
         this.widget_voltage = horizontalSliderWidget4;
-        widgetManager4.add_widget(horizontalSliderWidget4, ((G.width - 256) - 180) - 16, G.height - 48);
-        WidgetManager widgetManager5 = this.widgets;
+        this.widgets.add_widget(horizontalSliderWidget4, ((G.width - 256) - 180) - 16, G.height - 48);
         HorizontalSliderWidget horizontalSliderWidget5 = new HorizontalSliderWidget(8, 180);
         this.widget_thrust = horizontalSliderWidget5;
-        widgetManager5.add_widget(horizontalSliderWidget5, G.width - 320, G.height - 48);
-        WidgetManager widgetManager6 = this.widgets;
+        this.widgets.add_widget(horizontalSliderWidget5, G.width - 320, G.height - 48);
         HorizontalSliderWidget horizontalSliderWidget6 = new HorizontalSliderWidget(6, 64, 2.0f);
         this.widget_sizeb = horizontalSliderWidget6;
-        widgetManager6.add_widget(horizontalSliderWidget6, (G.width - 320) - 250, G.height - 48);
-        WidgetManager widgetManager7 = this.widgets;
+        this.widgets.add_widget(horizontalSliderWidget6, (G.width - 320) - 250, G.height - 48);
         HorizontalSliderWidget horizontalSliderWidget7 = new HorizontalSliderWidget(9, 180);
         this.widget_dspeed = horizontalSliderWidget7;
-        widgetManager7.add_widget(horizontalSliderWidget7, G.width - 320, G.height - 48);
-        WidgetManager widgetManager8 = this.widgets;
+        this.widgets.add_widget(horizontalSliderWidget7, G.width - 320, G.height - 48);
         HorizontalSliderWidget horizontalSliderWidget8 = new HorizontalSliderWidget(10, 180);
         this.widget_dforce = horizontalSliderWidget8;
-        widgetManager8.add_widget(horizontalSliderWidget8, ((G.width - 320) - 180) - 16, G.height - 48);
+        this.widgets.add_widget(horizontalSliderWidget8, ((G.width - 320) - 180) - 16, G.height - 48);
         this.widgets.disable(this.widget_size);
         this.widgets.disable(this.widget_elasticity);
         this.widgets.disable(this.widget_sizeb);
@@ -457,9 +446,9 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
         this.widgets.disable(this.widget_dspeed);
         this.widgets.disable(this.widget_dforce);
         String tmp = Settings.get("camerareset");
-        camera_reset = tmp == null || tmp.equals("yes") || tmp.equals("");
+        camera_reset = tmp == null || tmp.equals("yes") || tmp.isEmpty();
         String tmp2 = Settings.get("camerasmoothness");
-        camera_smoothness = (tmp2 == null || tmp2.equals("")) ? camera_smoothness : Integer.parseInt(tmp2);
+        camera_smoothness = (tmp2 == null || tmp2.isEmpty()) ? camera_smoothness : Integer.parseInt(tmp2);
         String tmp4 = Settings.get("cameraspeed");
         camera_speed = (tmp4 == null || tmp4.equals("")) ? camera_speed : Integer.parseInt(tmp4);
         newbgtex = TextureFactory.load("data/testnewbg.jpg");
@@ -585,38 +574,34 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
         ArrayList<Integer> fixed_dynamic = new ArrayList<>();
         ArrayList<String> fixed_hinge = new ArrayList<>();
         open(category, n);
-        Iterator<GrabableObject> it = this.om.all.iterator();
-        while (it.hasNext()) {
-            GrabableObject o = it.next();
+        for (GrabableObject o : this.om.all) {
             if (o instanceof Rope) {
                 Rope r = (Rope) o;
                 if (((RopeEnd) r.g1).fixed_dynamic) {
-                    fixed_dynamic.add(new Integer(r.g1.__unique_id));
+                    fixed_dynamic.add(r.g1.__unique_id);
                 }
                 if (((RopeEnd) r.g2).fixed_dynamic) {
-                    fixed_dynamic.add(new Integer(r.g2.__unique_id));
+                    fixed_dynamic.add(r.g2.__unique_id);
                 }
             } else if (o instanceof Damper) {
                 Damper r2 = (Damper) o;
                 if (r2.g1.fixed_dynamic) {
-                    fixed_dynamic.add(new Integer(r2.g1.__unique_id));
+                    fixed_dynamic.add(r2.g1.__unique_id);
                 }
                 if (r2.g2.fixed_dynamic) {
-                    fixed_dynamic.add(new Integer(r2.g2.__unique_id));
+                    fixed_dynamic.add(r2.g2.__unique_id);
                 }
             } else {
                 if (o.fixed_dynamic) {
-                    fixed_dynamic.add(new Integer(o.__unique_id));
+                    fixed_dynamic.add(o.__unique_id);
                 }
                 if ((o instanceof BaseMotor) && ((BaseMotor) o).fixed) {
-                    fixed.add(new Integer(o.__unique_id));
+                    fixed.add(o.__unique_id);
                 }
             }
         }
         int bg = this.level.background;
-        Iterator<Hinge> it2 = this.hinges.iterator();
-        while (it2.hasNext()) {
-            Hinge h = it2.next();
+        for (Hinge h : this.hinges) {
             fixed_hinge.add(String.valueOf(h.body1_id) + "_" + h.body2_id);
         }
         reset();
@@ -625,46 +610,36 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
         this.level = Level.open(world, file);
         Level.version_override = -1;
         this.level_filename = null;
-        if (this.level != null) {
-            this.ready = true;
-        } else {
+        if (this.level == null) {
             Settings.msg(L.get("unable_to_open_level"));
             this.level = Level.create(world);
-            this.ready = true;
         }
+        this.ready = true;
         level_type = 0;
         this.level_category = category;
         this.level.background = bg;
         load();
         level_type = 1;
-        Iterator<GrabableObject> it3 = this.om.all.iterator();
-        while (it3.hasNext()) {
-            GrabableObject o2 = it3.next();
+        for (GrabableObject o2 : this.om.all) {
             if (o2 instanceof Rope) {
                 Rope r3 = (Rope) o2;
-                if (fixed_dynamic.contains(Integer.valueOf(((RopeEnd) r3.g1).__unique_id))) {
+                if (fixed_dynamic.contains(((RopeEnd) r3.g1).__unique_id)) {
                     ((RopeEnd) r3.g1).fixed_dynamic = true;
                 }
-                if (fixed_dynamic.contains(Integer.valueOf(((RopeEnd) r3.g2).__unique_id))) {
+                if (fixed_dynamic.contains(((RopeEnd) r3.g2).__unique_id)) {
                     ((RopeEnd) r3.g2).fixed_dynamic = true;
                 }
             } else {
-                if (fixed_dynamic.contains(Integer.valueOf(o2.__unique_id))) {
+                if (fixed_dynamic.contains(o2.__unique_id)) {
                     o2.fixed_dynamic = true;
                 }
-                if ((o2 instanceof BaseMotor) && fixed.contains(Integer.valueOf(o2.__unique_id))) {
+                if ((o2 instanceof BaseMotor) && fixed.contains(o2.__unique_id)) {
                     ((BaseMotor) o2).fixed = true;
                 }
             }
         }
-        Iterator<Hinge> it4 = this.hinges.iterator();
-        while (it4.hasNext()) {
-            Hinge h2 = it4.next();
-            if (fixed_hinge.contains(String.valueOf(h2.body1_id) + "_" + h2.body2_id)) {
-                h2.fixed = true;
-            } else {
-                h2.fixed = false;
-            }
+        for (Hinge h2 : this.hinges) {
+            h2.fixed = fixed_hinge.contains(String.valueOf(h2.body1_id) + "_" + h2.body2_id);
         }
         pause_world();
         world.setContactFilter(this.contact_handler);
@@ -679,13 +654,11 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
         this.level = Level.open(world, file);
         this.level_filename = null;
         this.level_category = 0;
-        if (this.level != null) {
-            this.ready = true;
-        } else {
+        if (this.level == null) {
             Settings.msg(L.get("unable_to_open_level"));
             this.level = Level.create(world);
-            this.ready = true;
         }
+        this.ready = true;
         if (!this.level.type.equals("apparatus")) {
             i = this.level.type.equals("interactive") ? 2 : 1;
         }
@@ -758,13 +731,11 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
         sandbox = false;
         load();
         world.setContactFilter(this.contact_handler);
-        switch (this.level_n) {
-            case 0:
-                this.msg = L.get("ihelp1");
-                return;
-            default:
-                return;
+        if (this.level_n == 0) {
+            this.msg = L.get("ihelp1");
+            return;
         }
+        return;
     }
 
     public void open_autosave(int category, int n) {
@@ -779,32 +750,30 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
             if (o instanceof Rope) {
                 Rope r = (Rope) o;
                 if (((RopeEnd) r.g1).fixed_dynamic) {
-                    fixed_dynamic.add(new Integer(r.g1.__unique_id));
+                    fixed_dynamic.add(r.g1.__unique_id);
                 }
                 if (((RopeEnd) r.g2).fixed_dynamic) {
-                    fixed_dynamic.add(new Integer(r.g2.__unique_id));
+                    fixed_dynamic.add(r.g2.__unique_id);
                 }
             } else if (o instanceof Damper) {
                 Damper r2 = (Damper) o;
                 if (r2.g1.fixed_dynamic) {
-                    fixed_dynamic.add(new Integer(r2.g1.__unique_id));
+                    fixed_dynamic.add(r2.g1.__unique_id);
                 }
                 if (r2.g2.fixed_dynamic) {
-                    fixed_dynamic.add(new Integer(r2.g2.__unique_id));
+                    fixed_dynamic.add(r2.g2.__unique_id);
                 }
             } else {
                 if (o.fixed_dynamic) {
-                    fixed_dynamic.add(new Integer(o.__unique_id));
+                    fixed_dynamic.add(o.__unique_id);
                 }
                 if ((o instanceof BaseMotor) && ((BaseMotor) o).fixed && ((BaseMotor) o).attached_object != null) {
-                    fixed.add(new Integer(o.__unique_id));
+                    fixed.add(o.__unique_id);
                 }
             }
         }
         int bg = this.level.background;
-        Iterator<Hinge> it2 = this.hinges.iterator();
-        while (it2.hasNext()) {
-            Hinge h = it2.next();
+        for (Hinge h : this.hinges) {
             fixed_hinge.add(String.valueOf(h.body1_id) + "_" + h.body2_id);
         }
         reset();
@@ -828,45 +797,20 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
         level_type = 0;
         load();
         level_type = 1;
-        Iterator<GrabableObject> it3 = this.om.all.iterator();
-        while (it3.hasNext()) {
-            GrabableObject o2 = it3.next();
+        for (GrabableObject o2 : this.om.all) {
             if (o2 instanceof Rope) {
                 Rope r3 = (Rope) o2;
-                if (fixed_dynamic.contains(Integer.valueOf(((RopeEnd) r3.g1).__unique_id))) {
-                    ((RopeEnd) r3.g1).fixed_dynamic = true;
-                } else {
-                    ((RopeEnd) r3.g1).fixed_dynamic = false;
-                }
-                if (fixed_dynamic.contains(Integer.valueOf(((RopeEnd) r3.g2).__unique_id))) {
-                    ((RopeEnd) r3.g2).fixed_dynamic = true;
-                } else {
-                    ((RopeEnd) r3.g2).fixed_dynamic = false;
-                }
+                ((RopeEnd) r3.g1).fixed_dynamic = fixed_dynamic.contains(((RopeEnd) r3.g1).__unique_id);
+                ((RopeEnd) r3.g2).fixed_dynamic = fixed_dynamic.contains(((RopeEnd) r3.g2).__unique_id);
             } else {
-                if (fixed_dynamic.contains(Integer.valueOf(o2.__unique_id))) {
-                    o2.fixed_dynamic = true;
-                } else {
-                    o2.fixed_dynamic = false;
-                }
+                o2.fixed_dynamic = fixed_dynamic.contains(o2.__unique_id);
                 if (o2 instanceof BaseMotor) {
-                    if (fixed.contains(Integer.valueOf(o2.__unique_id))) {
-                        ((BaseMotor) o2).fixed = true;
-                        Gdx.app.log("basemotor was", "fixed");
-                    } else {
-                        ((BaseMotor) o2).fixed = false;
-                    }
+                    ((BaseMotor) o2).fixed = fixed.contains(o2.__unique_id);
                 }
             }
         }
-        Iterator<Hinge> it4 = this.hinges.iterator();
-        while (it4.hasNext()) {
-            Hinge h2 = it4.next();
-            if (fixed_hinge.contains(String.valueOf(h2.body1_id) + "_" + h2.body2_id)) {
-                h2.fixed = true;
-            } else {
-                h2.fixed = false;
-            }
+        for (Hinge h2 : this.hinges) {
+            h2.fixed = fixed_hinge.contains(String.valueOf(h2.body1_id) + "_" + h2.body2_id);
         }
         world.setContactFilter(this.contact_handler);
         helpify();
@@ -876,26 +820,19 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
 
     private void helpify() {
         if (this.level_category == 0) {
-            switch (this.level_n) {
-                case 1:
-                    if (has_multitouch) {
-                        this.msg = L.get("help2_1");
-                        return;
-                    } else {
-                        this.msg = L.get("help2_2");
-                        return;
-                    }
-                default:
-                    this.msg = L.get("help" + (this.level_n + 1));
-                    if (this.msg.length() == 0) {
-                        this.msg = null;
-                        return;
-                    } else if (this.msg.trim().equals("null")) {
-                        this.msg = null;
-                        return;
-                    } else {
-                        return;
-                    }
+            if (this.level_n == 1) {
+                this.msg = has_multitouch ? L.get("help2_1") : L.get("help2_2");
+                return;
+            }
+            this.msg = L.get("help" + (this.level_n + 1));
+            if (this.msg.isEmpty()) {
+                this.msg = null;
+                return;
+            } else if (this.msg.trim().equals("null")) {
+                this.msg = null;
+                return;
+            } else {
+                return;
             }
         } else if (this.level_category == 2) {
             switch (this.level_n) {
@@ -963,7 +900,7 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
                 autosave();
                 this.do_autosave = false;
             }
-            if (sandbox && System.currentTimeMillis() - this.last_autosave > ((long) (this.autosave_interval * 1000))) {
+            if (sandbox && System.currentTimeMillis() - this.last_autosave > ((long) (this.autosave_interval * 1000L))) {
                 this.last_autosave = System.currentTimeMillis();
                 if (this.modified) {
                     this.do_autosave = true;
@@ -1019,27 +956,21 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
                     while (delta2 >= 8000000) {
                         int iterations = physics_stability == 1 ? 10 : physics_stability == 0 ? 1 : 64;
                         world.step(0.011f, iterations, iterations);
-                        Iterator<Hinge> it = this.hinges.iterator();
-                        while (it.hasNext()) {
-                            it.next().tick();
+                        for (Hinge hinge : this.hinges) {
+                            hinge.tick();
                         }
-                        Iterator<RocketEngine> it2 = this.om.rocketengines.iterator();
-                        while (it2.hasNext()) {
-                            it2.next().step(0.008f);
+                        for (RocketEngine rocketEngine : this.om.rocketengines) {
+                            rocketEngine.step(0.008f);
                         }
                         if (Level.version >= 7) {
-                            Iterator<Rope> it3 = this.om.ropes.iterator();
-                            while (it3.hasNext()) {
-                                it3.next().tick();
-                            }
-                            Iterator<PanelCable> it4 = this.om.pcables.iterator();
-                            while (it4.hasNext()) {
-                                it4.next().tick();
-                            }
-                            Iterator<Cable> it5 = this.om.cables.iterator();
-                            while (it5.hasNext()) {
-                                it5.next().tick();
-                            }
+                            for (Rope rope : this.om.ropes)
+                                rope.tick();
+
+                            for (PanelCable panelCable : this.om.pcables)
+                                panelCable.tick();
+
+                            for (Cable cable : this.om.cables)
+                                cable.tick();
                         }
                         delta2 -= 8000000;
                     }
@@ -1066,38 +997,30 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
             }
             while (delta3 >= 8000000) {
                 world.step(0.011f, 10, 10);
-                Iterator<Hinge> it6 = this.hinges.iterator();
-                while (it6.hasNext()) {
-                    it6.next().tick();
-                }
+                for (Hinge hinge : this.hinges)
+                    hinge.tick();
+
                 delta3 -= 8000000;
             }
             this.time_accum = delta3;
         }
         this.time_last = now;
         if (mode != 3 || Level.version < 7) {
-            Iterator<Rope> it7 = this.om.ropes.iterator();
-            while (it7.hasNext()) {
-                it7.next().tick();
-            }
-            Iterator<PanelCable> it8 = this.om.pcables.iterator();
-            while (it8.hasNext()) {
-                it8.next().tick();
-            }
-            Iterator<Cable> it9 = this.om.cables.iterator();
-            while (it9.hasNext()) {
-                it9.next().tick();
-            }
+            for (Rope rope : this.om.ropes)
+                rope.tick();
+
+            for (PanelCable panelCable : this.om.pcables)
+                panelCable.tick();
+
+            for (Cable cable : this.om.cables)
+                cable.tick();
         }
         if (sandbox && mode != 3) {
-            Iterator<MetalBar> it10 = this.om.layer0.bars.iterator();
-            while (it10.hasNext()) {
-                it10.next().tick();
-            }
-            Iterator<MetalBar> it11 = this.om.layer1.bars.iterator();
-            while (it11.hasNext()) {
-                it11.next().tick();
-            }
+            for (MetalBar bar : this.om.layer0.bars)
+                bar.tick();
+
+            for (MetalBar metalBar : this.om.layer1.bars)
+                metalBar.tick();
         }
         return 0;
     }
@@ -1199,7 +1122,6 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
     private void cull_objects() {
         ArrayList<GrabableObject> objects = this.om.all;
         int sz = objects.size();
-        ArrayList<Hinge> hobjects = this.hinges;
         int hsz = this.hinges.size();
         float z = this.camera_h.camera_pos.z * T_EPSILON;
         for (int x = 0; x < sz; x++) {
@@ -1215,7 +1137,7 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
             }
         }
         for (int x2 = 0; x2 < hsz; x2++) {
-            Hinge o2 = hobjects.get(x2);
+            Hinge o2 = this.hinges.get(x2);
             o2.culled = false;
             Vector2 pos2 = o2.get_state().position;
             if (pos2 != null) {
@@ -1232,7 +1154,6 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
         Vector2 pos;
         ArrayList<GrabableObject> objects = this.om.all;
         int sz = objects.size();
-        ArrayList<Hinge> hobjects = this.hinges;
         int hsz = this.hinges.size();
         float z = this.camera_h.camera_pos.z * T_EPSILON;
         for (int x = 0; x < sz; x++) {
@@ -1248,7 +1169,7 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
             }
         }
         for (int x2 = 0; x2 < hsz; x2++) {
-            Hinge o2 = hobjects.get(x2);
+            Hinge o2 = this.hinges.get(x2);
             o2.culled = false;
             if (o2.joint != null) {
                 o2.save_state();
@@ -1324,10 +1245,10 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
             G.gl.glBlendFunc(770, 771);
             G.gl.glDisable(3553);
             G.gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-            if (enable_menu && connectanims.size() > 0) {
-                Iterator i = connectanims.iterator();
+            if (enable_menu && !connectanims.isEmpty()) {
+                Iterator<ConnectAnim> i = connectanims.iterator();
                 while (i.hasNext()) {
-                    ConnectAnim x = (ConnectAnim)i.next();
+                    ConnectAnim x = i.next();
                     if (!x.render()) {
                         i.remove();
                     }
@@ -1557,7 +1478,7 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
                 } else {
                     this.menu_cache.draw(this.left_menu_cache_id, 0, 1);
                 }
-                this.menu_cache.draw(this.undo_cache_id, (this.um.can_undo() ? 0 : 1) + 0, 1);
+                this.menu_cache.draw(this.undo_cache_id, (this.um.can_undo() ? 0 : 1), 1);
                 if (sandbox) {
                     if (this.open_animate_dir == -1) {
                         this.open_animate_time -= G.delta;
@@ -1611,7 +1532,7 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
                         }
                     } else {
                         this.menu_cache.draw(this.object_menu_cache_id, 3, 1);
-                        this.menu_cache.draw(this.special_menu_cache_id, (((Battery) this.grabbed_object).real_on ? 0 : 1) + 0, 1);
+                        this.menu_cache.draw(this.special_menu_cache_id, (((Battery) this.grabbed_object).real_on ? 0 : 1), 1);
                     }
                 }
             } else {
@@ -1694,9 +1615,7 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
         }
         Array<Body> bodies = new Array<>();
         world.getBodies(bodies);
-        Iterator<Body> i2 = bodies.iterator();
-        while (i2.hasNext()) {
-            Body b = i2.next();
+        for (Body b : bodies) {
             if (b == null) {
                 Gdx.app.log("WTFFFFFFFFFFFFFFFFFFFFFFF", "NULL?");
             } else {
@@ -1749,17 +1668,14 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
         this.camera_h.camera_pos.set(avgpos.x + 7.0f, avgpos.y - 5.0f, 15.0f);
         this.camera_h.save();
         id_counter++;
-        Iterator<StaticMotor> it = this.om.static_motors.iterator();
-        while (it.hasNext()) {
-            it.next().load(this.om.all);
+        for (StaticMotor staticMotor : this.om.static_motors) {
+            staticMotor.load(this.om.all);
         }
-        Iterator<DynamicMotor> it2 = this.om.layer0.dynamicmotors.iterator();
-        while (it2.hasNext()) {
-            it2.next().load(this.om.all);
+        for (DynamicMotor dynamicMotor : this.om.layer0.dynamicmotors) {
+            dynamicMotor.load(this.om.all);
         }
-        Iterator<DynamicMotor> it3 = this.om.layer1.dynamicmotors.iterator();
-        while (it3.hasNext()) {
-            it3.next().load(this.om.all);
+        for (DynamicMotor dynamicMotor : this.om.layer1.dynamicmotors) {
+            dynamicMotor.load(this.om.all);
         }
         Gdx.app.log("loaded motors", "ja");
         Iterator<Hinge> i = this.hinges.iterator();
@@ -1769,9 +1685,7 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
             GrabableObject o2 = null;
             int n1 = h.body1_id;
             int n2 = h.body2_id;
-            Iterator<GrabableObject> it4 = this.om.all.iterator();
-            while (it4.hasNext()) {
-                GrabableObject o3 = it4.next();
+            for (GrabableObject o3 : this.om.all) {
                 if (o3.__unique_id == n1) {
                     o1 = o3;
                 } else if (o3.__unique_id == n2) {
@@ -1827,7 +1741,7 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
         pause_world();
         from_sandbox = false;
         this.lowfpscount = 0;
-        if (from_community && this.om.layer0.controllers.size() > 0) {
+        if (from_community && !this.om.layer0.controllers.isEmpty()) {
             this.msg = L.get("hascontrolpanel");
         }
         MiscRenderer.update_quality();
@@ -1841,14 +1755,10 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
 
     private void resolve_cable_connections() {
         if (Level.version >= 3) {
-            Iterator<PanelCable> it = this.om.pcables.iterator();
-            while (it.hasNext()) {
-                PanelCable p = it.next();
+            for (PanelCable p : this.om.pcables) {
                 PanelCableEnd e1 = (PanelCableEnd) p.g1;
                 PanelCableEnd e2 = (PanelCableEnd) p.g2;
-                Iterator<GrabableObject> it2 = this.om.all.iterator();
-                while (it2.hasNext()) {
-                    GrabableObject o = it2.next();
+                for (GrabableObject o : this.om.all) {
                     if (e1.saved_oid != -1 && o.__unique_id == e1.saved_oid) {
                         if (o instanceof Battery) {
                             e1.attach_to_battery((Battery) o);
@@ -1878,14 +1788,10 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
                 }
                 p.tick();
             }
-            Iterator<Cable> it3 = this.om.cables.iterator();
-            while (it3.hasNext()) {
-                Cable p2 = it3.next();
+            for (Cable p2 : this.om.cables) {
                 CableEnd e12 = (CableEnd) p2.g1;
                 CableEnd e22 = (CableEnd) p2.g2;
-                Iterator<GrabableObject> it4 = this.om.all.iterator();
-                while (it4.hasNext()) {
-                    GrabableObject o2 = it4.next();
+                for (GrabableObject o2 : this.om.all) {
                     if (e12.saved_oid != -1 && o2.__unique_id == e12.saved_oid) {
                         if (o2 instanceof Hub) {
                             e12.attach_to_hub((Hub) o2);
@@ -1914,9 +1820,7 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
             MetalBar o2 = null;
             int n1 = c.b1_id;
             int n2 = c.b2_id;
-            Iterator<MetalBar> it = layer.bars.iterator();
-            while (it.hasNext()) {
-                MetalBar o = it.next();
+            for (MetalBar o : layer.bars) {
                 if (o.__unique_id == n1) {
                     o1 = o;
                 } else if (o.__unique_id == n2) {
@@ -1953,35 +1857,29 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
         if (rope_quality < 0) {
             rope_quality = 0;
         }
-        if (this.om.ropes.size() > 0) {
-            Iterator<Rope> it = this.om.ropes.iterator();
-            while (it.hasNext()) {
-                it.next().create_rope();
+        if (!this.om.ropes.isEmpty()) {
+            for (Rope rope : this.om.ropes) {
+                rope.create_rope();
             }
         }
-        if (this.om.cables.size() > 0) {
-            Iterator<Cable> it2 = this.om.cables.iterator();
-            while (it2.hasNext()) {
-                it2.next().create_rope();
+        if (!this.om.cables.isEmpty()) {
+            for (Cable cable : this.om.cables) {
+                cable.create_rope();
             }
         }
-        if (this.om.pcables.size() > 0) {
-            Iterator<PanelCable> it3 = this.om.pcables.iterator();
-            while (it3.hasNext()) {
-                it3.next().create_rope();
+        if (!this.om.pcables.isEmpty()) {
+            for (PanelCable panelCable : this.om.pcables) {
+                panelCable.create_rope();
             }
         }
-        Iterator<Rope> it4 = this.om.ropes.iterator();
-        while (it4.hasNext()) {
-            it4.next().stabilize();
+        for (Rope rope : this.om.ropes) {
+            rope.stabilize();
         }
-        Iterator<Cable> it5 = this.om.cables.iterator();
-        while (it5.hasNext()) {
-            it5.next().stabilize();
+        for (Cable cable : this.om.cables) {
+            cable.stabilize();
         }
-        Iterator<PanelCable> it6 = this.om.pcables.iterator();
-        while (it6.hasNext()) {
-            it6.next().stabilize();
+        for (PanelCable panelCable : this.om.pcables) {
+            panelCable.stabilize();
         }
     }
 
@@ -2011,35 +1909,35 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
             enable_shadows = false;
         } else {
             String tmp = Settings.get("enableshadows");
-            enable_shadows = tmp.equals("") || tmp.equals("yes");
+            enable_shadows = tmp.isEmpty() || tmp.equals("yes");
         }
         draw_fps = Settings.get("drawfps").equals("yes");
         draw_fps = Settings.get("drawfps").equals("yes");
         String tmp2 = Settings.get("ropequality");
-        rope_quality = (tmp2 == null || tmp2.equals("")) ? 100 : Integer.parseInt(tmp2);
+        rope_quality = (tmp2 == null || tmp2.isEmpty()) ? 100 : Integer.parseInt(tmp2);
         String tmp4 = Settings.get("bloom");
-        if (tmp4.equals("") || tmp4.equals("yes")) {
+        if (tmp4.isEmpty() || tmp4.equals("yes")) {
             z = true;
         } else {
             z = false;
         }
         enable_bloom = z;
         String tmp5 = Settings.get("reflection");
-        if (tmp5.equals("") || tmp5.equals("yes")) {
+        if (tmp5.isEmpty() || tmp5.equals("yes")) {
             z2 = true;
         } else {
             z2 = false;
         }
         enable_reflections = z2;
         String tmp6 = Settings.get("hqmeshes");
-        if (tmp6.equals("") || tmp6.equals("yes")) {
+        if (tmp6.isEmpty() || tmp6.equals("yes")) {
             z3 = true;
         } else {
             z3 = false;
         }
         enable_hqmeshes = z3;
         String tmp7 = Settings.get("enablebg");
-        if (tmp7.equals("") || tmp7.equals("yes")) {
+        if (tmp7.isEmpty() || tmp7.equals("yes")) {
             z4 = true;
         }
         enable_bg = z4;
@@ -2256,7 +2154,7 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
                 save();
                 break;
             case 52:
-                BaseObject o = (GrabableObject) ObjectFactory.adapter.create(world, 2, 18);
+                BaseObject o = ObjectFactory.adapter.create(world, 2, 18);
                 Damper _d = (Damper) o;
                 _d.g1.__unique_id = _d.__unique_id * 10000;
                 _d.g2.__unique_id = _d.__unique_id * 10000000;
@@ -2264,8 +2162,8 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
                 break;
             case 54:
                 ChristmasGift oo = (ChristmasGift) ObjectFactory.adapter.create(world, 2, 17);
-                oo.set_property("sx", Float.valueOf(0.25f + (0.125f * ((float) new Random().nextInt(4)))));
-                oo.set_property("sy", Float.valueOf(0.25f + (0.125f * ((float) new Random().nextInt(4)))));
+                oo.set_property("sx", 0.25f + (0.125f * ((float) new Random().nextInt(4))));
+                oo.set_property("sy", 0.25f + (0.125f * ((float) new Random().nextInt(4))));
                 Gdx.app.log("adding", "git");
                 this.om.add(oo);
                 break;
@@ -2373,56 +2271,44 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
         this.camera_h.velocity.set(0.0f, 0.0f, 0.0f);
         world.setContactFilter(this.contact_handler);
         world.setContactListener(this.contact_handler);
-        Iterator<GrabableObject> it = this.om.all.iterator();
-        while (it.hasNext()) {
-            it.next().set_active(false);
+        for (GrabableObject grabableObject : this.om.all) {
+            grabableObject.set_active(false);
         }
-        Iterator<GrabableObject> it2 = this.om.all.iterator();
-        while (it2.hasNext()) {
-            it2.next().pause();
+        for (GrabableObject grabableObject : this.om.all) {
+            grabableObject.pause();
         }
-        Iterator<GrabableObject> it3 = this.om.all.iterator();
-        while (it3.hasNext()) {
-            it3.next().set_active(false);
+        for (GrabableObject grabableObject : this.om.all) {
+            grabableObject.set_active(false);
         }
-        Iterator<StaticMotor> it4 = this.om.static_motors.iterator();
-        while (it4.hasNext()) {
-            it4.next().joint_pause();
+        for (StaticMotor staticMotor : this.om.static_motors) {
+            staticMotor.joint_pause();
         }
-        Iterator<DynamicMotor> it5 = this.om.layer0.dynamicmotors.iterator();
-        while (it5.hasNext()) {
-            it5.next().joint_pause();
+        for (DynamicMotor dynamicMotor : this.om.layer0.dynamicmotors) {
+            dynamicMotor.joint_pause();
         }
-        Iterator<DynamicMotor> it6 = this.om.layer1.dynamicmotors.iterator();
-        while (it6.hasNext()) {
-            it6.next().joint_pause();
+        for (DynamicMotor dynamicMotor : this.om.layer1.dynamicmotors) {
+            dynamicMotor.joint_pause();
         }
-        Iterator<GrabableObject> it7 = this.om.all.iterator();
-        while (it7.hasNext()) {
-            it7.next().set_active(false);
+        for (GrabableObject grabableObject : this.om.all) {
+            grabableObject.set_active(false);
         }
-        Iterator<Hinge> it8 = this.hinges.iterator();
-        while (it8.hasNext()) {
-            it8.next().recreate(world);
+        for (Hinge hinge : this.hinges) {
+            hinge.recreate(world);
         }
-        Iterator<GrabableObject> it9 = this.om.all.iterator();
-        while (it9.hasNext()) {
-            it9.next().pause();
+        for (GrabableObject grabableObject : this.om.all) {
+            grabableObject.pause();
         }
-        Iterator<GrabableObject> it10 = this.om.all.iterator();
-        while (it10.hasNext()) {
-            it10.next().set_active(true);
+        for (GrabableObject grabableObject : this.om.all) {
+            grabableObject.set_active(true);
         }
         if (!sandbox) {
             create_metal_cache();
         }
-        Iterator<Rope> it11 = this.om.ropes.iterator();
-        while (it11.hasNext()) {
-            it11.next().stabilize();
+        for (Rope rope : this.om.ropes) {
+            rope.stabilize();
         }
-        Iterator<PanelCable> it12 = this.om.pcables.iterator();
-        while (it12.hasNext()) {
-            it12.next().stabilize();
+        for (PanelCable panelCable : this.om.pcables) {
+            panelCable.stabilize();
         }
         Iterator<Cable> it13 = this.om.cables.iterator();
         while (it13.hasNext()) {
@@ -2434,9 +2320,7 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
         if (Level.version >= 3) {
             resolve_cable_connections();
         } else {
-            Iterator<Cable> it14 = this.om.cables.iterator();
-            while (it14.hasNext()) {
-                Cable r = it14.next();
+            for (Cable r : this.om.cables) {
                 r.g1.body.setActive(true);
                 r.g1.body.setAwake(true);
                 r.g2.body.setActive(true);
@@ -2448,9 +2332,7 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
                 r.g1.body.setFixedRotation(true);
                 r.g2.body.setFixedRotation(false);
             }
-            Iterator<PanelCable> it15 = this.om.pcables.iterator();
-            while (it15.hasNext()) {
-                PanelCable r2 = it15.next();
+            for (PanelCable r2 : this.om.pcables) {
                 r2.g1.body.setActive(true);
                 r2.g1.body.setAwake(true);
                 r2.g2.body.setActive(true);
@@ -2462,9 +2344,7 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
                 r2.g1.body.setFixedRotation(true);
                 r2.g2.body.setFixedRotation(false);
             }
-            Iterator<Panel> it16 = this.om.layer0.controllers.iterator();
-            while (it16.hasNext()) {
-                Panel p = it16.next();
+            for (Panel p : this.om.layer0.controllers) {
                 p.body.setFixedRotation(false);
                 p.translate(p.get_position().x, p.get_position().y);
             }
@@ -2498,38 +2378,30 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
         world.setContactListener(this.ingame_contact_handler);
         world.setGravity(new Vector2(0.0f, -9.8f));
         this.camera_h.save();
-        Iterator<Hinge> it = this.hinges.iterator();
-        while (it.hasNext()) {
-            it.next().save();
+        for (Hinge hinge : this.hinges) {
+            hinge.save();
         }
-        Iterator<GrabableObject> it2 = this.om.all.iterator();
-        while (it2.hasNext()) {
-            it2.next().set_active(false);
+        for (GrabableObject grabableObject : this.om.all) {
+            grabableObject.set_active(false);
         }
         world.step(1.0f, 500, 500);
-        Iterator<StaticMotor> it3 = this.om.static_motors.iterator();
-        while (it3.hasNext()) {
-            it3.next().joint_play();
+        for (StaticMotor staticMotor : this.om.static_motors) {
+            staticMotor.joint_play();
         }
-        Iterator<DynamicMotor> it4 = this.om.layer0.dynamicmotors.iterator();
-        while (it4.hasNext()) {
-            it4.next().joint_play();
+        for (DynamicMotor dynamicMotor : this.om.layer0.dynamicmotors) {
+            dynamicMotor.joint_play();
         }
-        Iterator<DynamicMotor> it5 = this.om.layer1.dynamicmotors.iterator();
-        while (it5.hasNext()) {
-            it5.next().joint_play();
+        for (DynamicMotor dynamicMotor : this.om.layer1.dynamicmotors) {
+            dynamicMotor.joint_play();
         }
-        Iterator<Hinge> it6 = this.hinges.iterator();
-        while (it6.hasNext()) {
-            it6.next().recreate(world);
+        for (Hinge hinge : this.hinges) {
+            hinge.recreate(world);
         }
-        Iterator<GrabableObject> it7 = this.om.all.iterator();
-        while (it7.hasNext()) {
-            it7.next().play();
+        for (GrabableObject grabableObject : this.om.all) {
+            grabableObject.play();
         }
-        Iterator<GrabableObject> it8 = this.om.all.iterator();
-        while (it8.hasNext()) {
-            it8.next().set_active(true);
+        for (GrabableObject grabableObject : this.om.all) {
+            grabableObject.set_active(true);
         }
         System.gc();
         this.time_last = System.nanoTime();
@@ -2540,34 +2412,27 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
             this.sim_thread.setPriority(5);
             this.sim_thread.start();
         }
-        Iterator<GrabableObject> it9 = this.om.all.iterator();
-        while (it9.hasNext()) {
-            it9.next().set_active(false);
+        for (GrabableObject grabableObject : this.om.all) {
+            grabableObject.set_active(false);
         }
         world.step(0.001f, 1, 1);
-        Iterator<StaticMotor> it10 = this.om.static_motors.iterator();
-        while (it10.hasNext()) {
-            it10.next().joint_play();
+        for (StaticMotor staticMotor : this.om.static_motors) {
+            staticMotor.joint_play();
         }
-        Iterator<DynamicMotor> it11 = this.om.layer0.dynamicmotors.iterator();
-        while (it11.hasNext()) {
-            it11.next().joint_play();
+        for (DynamicMotor dynamicMotor : this.om.layer0.dynamicmotors) {
+            dynamicMotor.joint_play();
         }
-        Iterator<DynamicMotor> it12 = this.om.layer1.dynamicmotors.iterator();
-        while (it12.hasNext()) {
-            it12.next().joint_play();
+        for (DynamicMotor dynamicMotor : this.om.layer1.dynamicmotors) {
+            dynamicMotor.joint_play();
         }
-        Iterator<Hinge> it13 = this.hinges.iterator();
-        while (it13.hasNext()) {
-            it13.next().recreate(world);
+        for (Hinge hinge : this.hinges) {
+            hinge.recreate(world);
         }
-        Iterator<GrabableObject> it14 = this.om.all.iterator();
-        while (it14.hasNext()) {
-            it14.next().play();
+        for (GrabableObject grabableObject : this.om.all) {
+            grabableObject.play();
         }
-        Iterator<GrabableObject> it15 = this.om.all.iterator();
-        while (it15.hasNext()) {
-            it15.next().set_active(true);
+        for (GrabableObject grabableObject : this.om.all) {
+            grabableObject.set_active(true);
         }
     }
 
@@ -2583,19 +2448,17 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
             if (o instanceof Bar) {
                 Bar b = (Bar) o;
                 this.widgets.enable(this.widget_size);
-                HorizontalSliderWidget horizontalSliderWidget = this.widget_size;
                 if (b.size.x / 2.0f <= 3.99f) {
                     i2 = b.size.x / 2.0f > 1.99f ? 0 : -1;
                 }
-                horizontalSliderWidget.value = (float) i2;
+                this.widget_size.value = (float) i2;
             } else if (o instanceof Wheel) {
                 Wheel w = (Wheel) o;
                 this.widgets.enable(this.widget_size);
-                HorizontalSliderWidget horizontalSliderWidget2 = this.widget_size;
                 if (w.size <= 1.99f) {
                     i2 = w.size > 0.99f ? 0 : -1;
                 }
-                horizontalSliderWidget2.value = (float) i2;
+                this.widget_size.value = (float) i2;
             } else if (o instanceof BaseRopeEnd) {
                 BaseRopeEnd b2 = (BaseRopeEnd) o;
                 this.widgets.enable(this.widget_size);
@@ -2603,11 +2466,10 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
                 this.widget_size.value = Math.min(1.0f, this.widget_size.value);
                 if (o instanceof RopeEnd) {
                     this.widgets.enable(this.widget_elasticity);
-                    HorizontalSliderWidget horizontalSliderWidget3 = this.widget_elasticity;
                     if (!b2.get_baserope().rubber) {
                         i2 = -1;
                     }
-                    horizontalSliderWidget3.value = (float) i2;
+                    this.widget_elasticity.value = (float) i2;
                 }
             } else if (o instanceof DamperEnd) {
                 DamperEnd e = (DamperEnd) o;
@@ -2620,11 +2482,10 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
                 this.widgets.enable(this.widget_current);
                 this.widgets.enable(this.widget_voltage);
                 this.widgets.enable(this.widget_sizeb);
-                HorizontalSliderWidget horizontalSliderWidget4 = this.widget_sizeb;
                 if (h.size != 1) {
                     i = 1;
                 }
-                horizontalSliderWidget4.value = (float) i;
+                this.widget_sizeb.value = (float) i;
                 this.widget_current.value = (h.current * 2.0f) - 1.0f;
                 this.widget_voltage.value = (h.voltage * 2.0f) - 1.0f;
             } else if (o instanceof RocketEngine) {
@@ -2760,9 +2621,7 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
                 i2.remove();
             }
         }
-        Iterator<StaticMotor> it = this.om.static_motors.iterator();
-        while (it.hasNext()) {
-            StaticMotor h3 = it.next();
+        for (StaticMotor h3 : this.om.static_motors) {
             if ((!h3.fixed || override_fixed) && h3.attached_object == o) {
                 if (!this.disable_undo) {
                     this.um.save_basemotor(h3);
@@ -2773,9 +2632,7 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
                 h3.detach();
             }
         }
-        Iterator<DynamicMotor> it2 = this.om.layer0.dynamicmotors.iterator();
-        while (it2.hasNext()) {
-            DynamicMotor h4 = it2.next();
+        for (DynamicMotor h4 : this.om.layer0.dynamicmotors) {
             if ((!h4.fixed || override_fixed) && h4.attached_object == o) {
                 if (!this.disable_undo) {
                     this.um.save_basemotor(h4);
@@ -2786,9 +2643,7 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
                 h4.detach();
             }
         }
-        Iterator<DynamicMotor> it3 = this.om.layer1.dynamicmotors.iterator();
-        while (it3.hasNext()) {
-            DynamicMotor h5 = it3.next();
+        for (DynamicMotor h5 : this.om.layer1.dynamicmotors) {
             if ((!h5.fixed || override_fixed) && h5.attached_object == o) {
                 if (!this.disable_undo) {
                     this.um.save_basemotor(h5);
@@ -2802,9 +2657,8 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
     }
 
     public void remove_potential_fixture_pair(Body b) {
-        Iterator<Fixture> it = b.getFixtureList().iterator();
-        while (it.hasNext()) {
-            remove_potential_fixture_pair(it.next());
+        for (Fixture fixture : b.getFixtureList()) {
+            remove_potential_fixture_pair(fixture);
         }
     }
 
@@ -2844,8 +2698,6 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
                     pause_world();
                     this.state = 0;
                 } else {
-                    if (this.level_category == 2) {
-                    }
                     sandbox = true;
                     this.state = 0;
                     level_type = 0;
@@ -3057,21 +2909,19 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
                             } else if (this.grabbed_object instanceof DamperEnd) {
                                 Damper d = ((DamperEnd) this.grabbed_object).damper;
                                 if (d.g1.num_hinges == 0 && d.g2.num_hinges == 0) {
-                                    ObjectManager objectManager = this.om;
                                     if (this.grabbed_object.layer != 1) {
                                         i3 = 1;
                                     }
-                                    objectManager.relayer(d, i3);
+                                    this.om.relayer(d, i3);
                                 } else {
                                     Settings.msg(L.get("mustdetach"));
                                 }
                             } else {
-                                ObjectManager objectManager2 = this.om;
                                 GrabableObject grabableObject2 = this.grabbed_object;
                                 if (this.grabbed_object.layer != 1) {
                                     i2 = 1;
                                 }
-                                objectManager2.relayer(grabableObject2, i2);
+                                this.om.relayer(grabableObject2, i2);
                             }
                             if (this.grabbed_object.body != null) {
                                 remove_potential_fixture_pair(this.grabbed_object.body);
@@ -3208,7 +3058,7 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
             ret = true;
             GrabableObject o = null;
             int offs = (w - ((int) v.x)) / 56;
-            Gdx.app.log("offs", new StringBuilder().append(offs).toString());
+            Gdx.app.log("offs", String.valueOf(offs));
             if (this.open_sandbox_category == -1) {
                 return touch_handle_sandbox_category_btns(offs, p);
             }
@@ -3363,19 +3213,7 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
                 long time = System.currentTimeMillis();
                 Intersector.intersectRayPlane(G.p_cam.getPickRay((float) x, (float) y), yaxis, this.tmp3);
                 if (time - this.last_touch_time < 333 && time - this.wrench_anim_start > 150) {
-                    ContactHandler.FixturePair found_pair = null;
-                    float found_dst = 0.0f;
-                    for (int f = 0; f < ContactHandler.num_fixture_pairs; f++) {
-                        ContactHandler.FixturePair fp = ContactHandler.fixture_pairs[f];
-                        Vector2 pt = fp.get_intersection_point();
-                        if (pt != null && (fp.a.getBody().getUserData() == this.last_grabbed || fp.b.getBody().getUserData() == this.last_grabbed)) {
-                            float dist = pt.dst(this.tmp3.x, this.tmp3.y);
-                            if (dist < 3.0f && (found_pair == null || dist < found_dst)) {
-                                found_dst = pt.dst(this.tmp3.x, this.tmp3.y);
-                                found_pair = fp;
-                            }
-                        }
-                    }
+                    ContactHandler.FixturePair found_pair = getFixturePair();
                     if (found_pair != null) {
                         if (found_pair.same_layer || (found_pair.a.getBody().getUserData() instanceof BaseMotor) || (found_pair.b.getBody().getUserData() instanceof BaseMotor)) {
                             create_hinge(found_pair, 1);
@@ -3427,6 +3265,23 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
         return true;
     }
 
+    private ContactHandler.FixturePair getFixturePair() {
+        ContactHandler.FixturePair found_pair = null;
+        float found_dst = 0.0f;
+        for (int f = 0; f < ContactHandler.num_fixture_pairs; f++) {
+            ContactHandler.FixturePair fp = ContactHandler.fixture_pairs[f];
+            Vector2 pt = fp.get_intersection_point();
+            if (pt != null && (fp.a.getBody().getUserData() == this.last_grabbed || fp.b.getBody().getUserData() == this.last_grabbed)) {
+                float dist = pt.dst(this.tmp3.x, this.tmp3.y);
+                if (dist < 3.0f && (found_pair == null || dist < found_dst)) {
+                    found_dst = pt.dst(this.tmp3.x, this.tmp3.y);
+                    found_pair = fp;
+                }
+            }
+        }
+        return found_pair;
+    }
+
     private void release_ghost() {
         this.dragging_ghost = false;
         this.ghost_object.ghost = false;
@@ -3469,11 +3324,7 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
         } else if (a instanceof BaseMotor) {
             attach_to_motor((BaseMotor) a, b);
             BaseMotor baseMotor = (BaseMotor) a;
-            if (sandbox) {
-                z = true;
-            } else {
-                z = false;
-            }
+            z = sandbox;
             baseMotor.fixed = z;
             connectanims.add(new ConnectAnim(0, fp.point.x, fp.point.y));
             return;
@@ -3498,11 +3349,7 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
             hinge.rot_extra = 180.0f;
         }
         hinge.setup((GrabableObject) fp.a.getBody().getUserData(), (GrabableObject) fp.b.getBody().getUserData(), fp.point);
-        if (sandbox) {
-            hinge.fixed = true;
-        } else {
-            hinge.fixed = false;
-        }
+        hinge.fixed = sandbox;
         this.hinges.add(hinge);
         this.um.add_hinge(hinge);
         this.um.commit_step();
@@ -3891,9 +3738,7 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
         sandbox = false;
         this.um.clear();
         create_metal_cache();
-        Iterator<GrabableObject> it = this.om.all.iterator();
-        while (it.hasNext()) {
-            GrabableObject b = it.next();
+        for (GrabableObject b : this.om.all) {
             if (b.num_hinges > 0) {
                 b.fixed_dynamic = true;
             }
@@ -3902,9 +3747,8 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
             release_object();
         }
         this.contact_handler.reset();
-        Iterator<GrabableObject> it2 = this.om.all.iterator();
-        while (it2.hasNext()) {
-            it2.next().sandbox_save();
+        for (GrabableObject grabableObject : this.om.all) {
+            grabableObject.sandbox_save();
         }
     }
 
@@ -3915,9 +3759,7 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
             from_sandbox = false;
             world.setContactFilter(this.falsefilter);
             this.contact_handler.reset();
-            Iterator<GrabableObject> it = this.om.all.iterator();
-            while (it.hasNext()) {
-                GrabableObject b = it.next();
+            for (GrabableObject b : this.om.all) {
                 if (b.num_hinges > 0) {
                     b.fixed_dynamic = false;
                 }
@@ -3925,9 +3767,8 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
             if (this.grabbed_object != null) {
                 release_object();
             }
-            Iterator<GrabableObject> it2 = this.om.all.iterator();
-            while (it2.hasNext()) {
-                it2.next().set_active(false);
+            for (GrabableObject grabableObject : this.om.all) {
+                grabableObject.set_active(false);
             }
             Iterator<Hinge> i = this.hinges.iterator();
             while (i.hasNext()) {
@@ -3937,38 +3778,29 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
                     i.remove();
                 }
             }
-            Iterator<DynamicMotor> i2 = this.om.layer0.dynamicmotors.iterator();
-            while (i2.hasNext()) {
-                DynamicMotor h2 = i2.next();
+            for (DynamicMotor h2 : this.om.layer0.dynamicmotors) {
                 if (!h2.fixed) {
                     h2.detach();
                 }
             }
-            Iterator<DynamicMotor> i3 = this.om.layer0.dynamicmotors.iterator();
-            while (i3.hasNext()) {
-                DynamicMotor h3 = i3.next();
+            for (DynamicMotor h3 : this.om.layer0.dynamicmotors) {
                 if (!h3.fixed) {
                     h3.detach();
                 }
             }
-            Iterator<StaticMotor> i4 = this.om.static_motors.iterator();
-            while (i4.hasNext()) {
-                StaticMotor h4 = i4.next();
+            for (StaticMotor h4 : this.om.static_motors) {
                 if (!h4.fixed) {
                     h4.detach();
                 }
             }
-            Iterator<GrabableObject> it3 = this.om.all.iterator();
-            while (it3.hasNext()) {
-                it3.next().set_active(false);
+            for (GrabableObject grabableObject : this.om.all) {
+                grabableObject.set_active(false);
             }
-            Iterator<GrabableObject> it4 = this.om.all.iterator();
-            while (it4.hasNext()) {
-                it4.next().sandbox_load();
+            for (GrabableObject grabableObject : this.om.all) {
+                grabableObject.sandbox_load();
             }
-            Iterator<GrabableObject> it5 = this.om.all.iterator();
-            while (it5.hasNext()) {
-                it5.next().set_active(true);
+            for (GrabableObject grabableObject : this.om.all) {
+                grabableObject.set_active(true);
             }
             world.setContactFilter(this.contact_handler);
         }

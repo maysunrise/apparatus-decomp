@@ -140,7 +140,11 @@ public class Battery extends GrabableObject {
         reshape();
         this.body.setUserData(this);
         this.layer = 0;
-        this.properties = new BaseObject.Property[]{new BaseObject.Property("v", BaseObject.Property.Type.FLOAT, new Float(0.5f)), new BaseObject.Property("a", BaseObject.Property.Type.FLOAT, new Float(0.5f)), new BaseObject.Property("s", BaseObject.Property.Type.INT, new Integer(this.size)), new BaseObject.Property("on", BaseObject.Property.Type.BOOLEAN, new Boolean(true))};
+        this.properties = new BaseObject.Property[]{
+                new BaseObject.Property("v", BaseObject.Property.Type.FLOAT, new Float(0.5f)),
+                new BaseObject.Property("a", BaseObject.Property.Type.FLOAT, Float.valueOf(0.5f)),
+                new BaseObject.Property("s", BaseObject.Property.Type.INT, this.size),
+                new BaseObject.Property("on", BaseObject.Property.Type.BOOLEAN, Boolean.TRUE)};
         this.fixed_layer = true;
         this.ingame_type = BodyDef.BodyType.DynamicBody;
         this.build_type = BodyDef.BodyType.StaticBody;
@@ -347,15 +351,15 @@ public class Battery extends GrabableObject {
     @Override // com.bithack.apparatus.objects.BaseObject
     public void set_property(String name, Object value) {
         if (name.equals("v")) {
-            this.voltage = ((Float) value).floatValue();
+            this.voltage = (Float) value;
         } else if (name.equals("a")) {
-            this.current = ((Float) value).floatValue();
+            this.current = (Float) value;
         } else if (name.equals("on")) {
-            boolean zBooleanValue = ((Boolean) value).booleanValue();
+            boolean zBooleanValue = (Boolean) value;
             this.on = zBooleanValue;
             this.real_on = zBooleanValue;
         } else if (name.equals("s")) {
-            this.size = ((Integer) value).intValue();
+            this.size = (Integer) value;
             reshape();
         }
         super.set_property(name, value);
@@ -363,10 +367,10 @@ public class Battery extends GrabableObject {
 
     @Override // com.bithack.apparatus.objects.BaseObject
     public void update_properties() {
-        set_property("a", new Float(this.current));
-        set_property("v", new Float(this.voltage));
-        set_property("on", new Boolean(this.real_on));
-        set_property("s", new Integer(this.size));
+        set_property("a", this.current);
+        set_property("v", this.voltage);
+        set_property("on", this.real_on);
+        set_property("s", this.size);
     }
 
     @Override // com.bithack.apparatus.objects.BaseObject

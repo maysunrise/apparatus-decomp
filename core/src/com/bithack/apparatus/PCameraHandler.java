@@ -60,7 +60,7 @@ public class PCameraHandler {
             }
             this.target_offs.add(this.velocity.tmp().mul(delta));
             this.tmp.set(tpos.x, tpos.y, 0.0f).add(this.target_offs.x, this.target_offs.y, 0.0f);
-            Ray r = G.p_cam.getPickRay(G.realwidth / 2, G.realheight / 2);
+            Ray r = G.p_cam.getPickRay((float) G.realwidth / 2, (float) G.realheight / 2);
             Intersector.intersectRayPlane(r, Game.yaxis, this.tmp2);
             this.tmp.sub(this.tmp2.x, this.tmp2.y, 0.0f);
             this.camera_pos.add(this.tmp.x * Math.abs(this.tmp.x) * delta * delta, this.tmp.y * Math.abs(this.tmp.y) * delta * delta, 0.0f);

@@ -55,7 +55,7 @@ public class HorizontalSliderWidget extends Widget {
 
     @Override // com.bithack.apparatus.ui.IWidget
     public void touch_down_local(int x, int y) {
-        this.value = this.min + ((this.max - this.min) * (x / this.width));
+        this.value = this.min + ((this.max - this.min) * ((float) x / this.width));
         if (this.snap != 0.0f) {
             this.value = Math.round(this.value);
         }

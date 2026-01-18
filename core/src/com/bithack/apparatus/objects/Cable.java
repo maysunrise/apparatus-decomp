@@ -49,17 +49,17 @@ public class Cable extends BaseCable {
     @Override // com.bithack.apparatus.objects.BaseRope, com.bithack.apparatus.objects.BaseObject
     public void set_property(String name, Object value) {
         if (name.equals("e1oid")) {
-            ((CableEnd) this.g1).saved_oid = ((Integer) value).intValue();
+            ((CableEnd) this.g1).saved_oid = (Integer) value;
         } else if (name.equals("e2oid")) {
-            ((CableEnd) this.g2).saved_oid = ((Integer) value).intValue();
+            ((CableEnd) this.g2).saved_oid = (Integer) value;
         }
         super.set_property(name, value);
     }
 
     @Override // com.bithack.apparatus.objects.BaseRope, com.bithack.apparatus.objects.BaseObject
     public void write_to_stream(JarOutputStream o) throws IOException {
-        set_property("e1oid", new Integer(((CableEnd) this.g1).saved_oid));
-        set_property("e2oid", new Integer(((CableEnd) this.g2).saved_oid));
+        set_property("e1oid", ((CableEnd) this.g1).saved_oid);
+        set_property("e2oid", ((CableEnd) this.g2).saved_oid);
         super.write_to_stream(o);
     }
 

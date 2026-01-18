@@ -12,7 +12,6 @@ import com.bithack.apparatus.menu.LoadingScreen;
 import com.bithack.apparatus.menu.MainMenu;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /* loaded from: classes.dex */
 public class ApparatusApp implements ApplicationListener {
@@ -145,12 +144,10 @@ public class ApparatusApp implements ApplicationListener {
     public void render() {
         G.delta = Gdx.graphics.getDeltaTime();
         G.gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-        if (scheduled.size() > 0 && LoadingScreen.initialized) {
-            Iterator<Runnable> it = scheduled.iterator();
-            while (it.hasNext()) {
-                Runnable r = it.next();
+        if (!scheduled.isEmpty() && LoadingScreen.initialized) {
+            for (Runnable r : scheduled)
                 r.run();
-            }
+
             scheduled.clear();
         }
         if (this.load_next) {
@@ -207,7 +204,7 @@ public class ApparatusApp implements ApplicationListener {
                 G.batch.begin();
                 G.batch.setColor(Color.BLACK);
                 G.font.setColor(Color.BLACK);
-                G.font.draw(G.batch, "LOADING...", (G.realwidth / 2) - 50, G.realheight / 2);
+                G.font.draw(G.batch, "LOADING...", ((float) G.realwidth / 2) - 50, (float) G.realheight / 2);
                 G.batch.setColor(Color.WHITE);
                 G.font.setColor(Color.WHITE);
                 G.batch.end();
