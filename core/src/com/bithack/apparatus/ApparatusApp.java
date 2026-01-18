@@ -7,6 +7,10 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.bithack.apparatus.graphics.G;
 import com.bithack.apparatus.graphics.MiscRenderer;
+import com.bithack.apparatus.menu.LevelMenu;
+import com.bithack.apparatus.menu.LoadingScreen;
+import com.bithack.apparatus.menu.MainMenu;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -25,13 +29,13 @@ public class ApparatusApp implements ApplicationListener {
     int fade_dir;
     private int last_category;
     private int last_id;
-    LevelMenu levelmenu;
+    public LevelMenu levelmenu;
     Screen loading_screen;
-    MainMenu mainmenu;
+    public MainMenu mainmenu;
     Screen menu;
     private String next_level;
     Screen next_screen;
-    Screen sandbox;
+    public Screen sandbox;
     public static Backend backend = null;
     private static ArrayList<Runnable> scheduled = new ArrayList<>();
     public static Game game = null;

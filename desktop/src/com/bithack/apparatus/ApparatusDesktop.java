@@ -6,6 +6,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.files.FileHandle;
 import com.bithack.apparatus.ApparatusApp;
+import com.bithack.apparatus.menu.LevelMenu;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;

@@ -9,7 +9,7 @@ import com.bithack.apparatus.objects.BaseObject;
 /* loaded from: classes.dex */
 public class CameraHandler {
     private final OrthographicCamera camera;
-    Vector3 camera_pos;
+    public Vector3 camera_pos;
     private BaseObject target;
     public final Vector3 velocity = new Vector3(0.0f, 0.0f, 0.0f);
     private final Vector3 target_offs = new Vector3(0.0f, 0.0f, 0.0f);

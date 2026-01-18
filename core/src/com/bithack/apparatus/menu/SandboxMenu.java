@@ -1,20 +1,29 @@
-package com.bithack.apparatus;
+package com.bithack.apparatus.menu;
 
+import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import com.bithack.apparatus.ApparatusApp;
+import com.bithack.apparatus.Game;
+import com.bithack.apparatus.L;
+import com.bithack.apparatus.Screen;
+import com.bithack.apparatus.Settings;
+import com.bithack.apparatus.SoundManager;
 import com.bithack.apparatus.graphics.G;
 import com.bithack.apparatus.graphics.MiscRenderer;
 import com.bithack.apparatus.graphics.TextureFactory;
 
 /* loaded from: classes.dex */
-public class MainMenu extends Screen implements InputProcessor {
-    private final Texture bgtex = TextureFactory.load("data/apparatusmenu.png");
+public class SandboxMenu extends Screen implements InputProcessor {
+    private final Texture bgtex = TextureFactory.load("data/sandboxmenu.png");
     final ApparatusApp tp;
 
-    public MainMenu(ApparatusApp tp) {
+    public SandboxMenu(ApparatusApp tp) {
         this.tp = tp;
     }
 
@@ -35,23 +44,6 @@ public class MainMenu extends Screen implements InputProcessor {
         G.gl.glEnable(3553);
         this.bgtex.bind();
         MiscRenderer.draw_textured_box();
-        G.gl.glEnable(3042);
-        G.gl.glBlendFunc(770, 771);
-        LevelMenu.lchecktex.bind();
-        if (Game.enable_sound) {
-            G.gl.glPushMatrix();
-            G.gl.glTranslatef(-0.84749997f, -0.8025f, 0.0f);
-            G.gl.glScalef(0.04f, 0.06666667f, 1.0f);
-            MiscRenderer.draw_textured_box();
-            G.gl.glPopMatrix();
-        }
-        if (Game.enable_music) {
-            G.gl.glPushMatrix();
-            G.gl.glTranslatef(-0.46f, -0.8025f, 0.0f);
-            G.gl.glScalef(0.04f, 0.06666667f, 1.0f);
-            MiscRenderer.draw_textured_box();
-            G.gl.glPopMatrix();
-        }
         G.gl.glDepthMask(true);
         G.gl.glEnable(2929);
     }
@@ -59,7 +51,10 @@ public class MainMenu extends Screen implements InputProcessor {
     @Override // com.bithack.apparatus.Screen
     public void resume() {
         Gdx.input.setInputProcessor(this);
-        SoundManager.play_music();
+        FileHandle h = Gdx.files.getFileHandle("/ApparatusLevels/.autosave.jar", Files.FileType.External);
+        if (h.exists()) {
+            ApparatusApp.backend.open_autosave_dialog();
+        }
     }
 
     @Override // com.bithack.apparatus.Screen
@@ -73,11 +68,12 @@ public class MainMenu extends Screen implements InputProcessor {
     }
 
     @Override // com.badlogic.gdx.InputProcessor
-    public boolean keyDown(int arg0) {
-        if (arg0 == 4) {
-            Settings.save();
-            ApparatusApp.backend.exit2();
-            return false;
+    public boolean keyDown(int code) {
+        switch (code) {
+            case 4:
+            case Input.Keys.B /* 30 */:
+                this.tp.open_mainmenu();
+                break;
         }
         return false;
     }
@@ -96,41 +92,38 @@ public class MainMenu extends Screen implements InputProcessor {
     public boolean touchDown(int x, int y, int pointer, int btn) {
 		float px = ((float) x) / ((float) G.realwidth);
 		float py = ((float) y) / ((float) G.realheight);
-        Gdx.app.log("px,py", String.valueOf(px) + " " + py + " " + G.realwidth + " " + G.realheight);
-
-        if (py <= 0.26f || py >= 0.53f) {
-            if (py > 0.53f && py < 0.73f) {
-                if (px > 0.04f && px < 0.34f) {
-                    this.tp.open_sandbox();
-                } else if (px > 0.41f && px < 0.76f) {
-                    ApparatusApp.backend.open_settings();
+        Gdx.app.log("px,py", String.valueOf(px) + " " + py);
+        if (x < 64 && y > G.realheight - 100) {
+            this.tp.open_mainmenu();
+        } else if (x <= G.realwidth - 64 || y <= G.realheight - 100) {
+            if (py > 0.27f && py < 0.49f && px > 0.29f && px < 0.7f) {
+                Game game = ApparatusApp.game;
+                Game.sandbox = true;
+                Game game2 = ApparatusApp.game;
+                Game.from_community = false;
+                ApparatusApp.game.create_level(0);
+                this.tp.play();
+                SoundManager.play_startlevel();
+            }
+            if (py > 0.47f && py < 0.77f) {
+                if (px > 0.08f && px < 0.5f) {
+                    Game game3 = ApparatusApp.game;
+                    Game.sandbox = true;
+                    Game game4 = ApparatusApp.game;
+                    Game.from_community = false;
+                    ApparatusApp.game.create_level(1);
+                    SoundManager.play_startlevel();
+                    this.tp.play();
+                } else if (px > 0.5f && px < 0.92f) {
+                    Settings.msg(L.get("coming_soon"));
                 }
             }
-        } else if (px > 0.03f && px < 0.34f) {
-            ApparatusApp.backend.open_packchooser();
-        } else if (px > 0.34f && px < 0.8f) {
-            ApparatusApp.backend.open_community();
-        }
-        if (px > 0.04f && px < 0.12f && py > 0.81f) {
-            Game.enable_sound = !Game.enable_sound;
-            if (Game.enable_sound) {
-                SoundManager.enable_sound();
-            } else {
-                SoundManager.disable_sound();
+            if (px > 0.67d && px < 0.85d && py > 0.77f && py < 0.9f) {
+                ApparatusApp.backend.open_level_list();
             }
-        } else if (px > 0.21f && px < 0.3f && py > 0.81f) {
-            Game.enable_music = !Game.enable_music;
-            if (Game.enable_music) {
-                SoundManager.enable_music();
-            } else {
-                SoundManager.disable_music();
-            }
+        } else {
+            ApparatusApp.backend.open_sandbox_info();
         }
-        if (px > 0.82f && py > 0.82f) {
-            Settings.save();
-            ApparatusApp.backend.exit2();
-        }
-        Gdx.input.setInputProcessor(this);
         return true;
     }
 

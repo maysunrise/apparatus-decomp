@@ -1,10 +1,15 @@
-package com.bithack.apparatus;
+package com.bithack.apparatus.menu;
 
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
+import com.bithack.apparatus.ApparatusApp;
+import com.bithack.apparatus.Game;
+import com.bithack.apparatus.ObjectFactory;
+import com.bithack.apparatus.ObjectFactoryAdapter;
+import com.bithack.apparatus.Screen;
 import com.bithack.apparatus.graphics.G;
 import com.bithack.apparatus.graphics.MiscRenderer;
 import com.bithack.apparatus.graphics.TextureFactory;
@@ -18,7 +23,7 @@ public class LoadingScreen extends Screen {
     final int next;
     ApparatusApp tp;
     public static Runnable ready_runnable = null;
-    static boolean initialized = false;
+    public static boolean initialized = false;
     private boolean rendered = false;
     private int init_counter = 0;
 

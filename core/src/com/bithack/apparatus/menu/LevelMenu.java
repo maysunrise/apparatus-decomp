@@ -1,4 +1,4 @@
-package com.bithack.apparatus;
+package com.bithack.apparatus.menu;
 
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
@@ -18,6 +18,13 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.QueryCallback;
 import com.badlogic.gdx.physics.box2d.World;
+import com.bithack.apparatus.ApparatusApp;
+import com.bithack.apparatus.CameraHandler;
+import com.bithack.apparatus.Game;
+import com.bithack.apparatus.L;
+import com.bithack.apparatus.Screen;
+import com.bithack.apparatus.Settings;
+import com.bithack.apparatus.SoundManager;
 import com.bithack.apparatus.graphics.G;
 import com.bithack.apparatus.graphics.MiscRenderer;
 import com.bithack.apparatus.graphics.TextureFactory;
