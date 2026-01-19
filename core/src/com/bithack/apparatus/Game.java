@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteCache;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Plane;
@@ -244,7 +243,7 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
     private int lowfpscount = 0;
     private boolean lowfpsfixed = false;
     private Texture lvlcompletetex;
-    private final SpriteCache menu_cache;
+    private final BetterSpriteCache menu_cache;
     private Mesh metalmesh = null;
     private boolean modified = false;
     private MouseJoint mousejoint;
@@ -420,7 +419,7 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
         Bucket._init();
         RocketEngine._init();
         IlluminationManager.init(this);
-        this.menu_cache = new SpriteCache();
+        this.menu_cache = new BetterSpriteCache();
         generate_caches();
 
         this.widgets = new WidgetManager("uicontrols.png", this);
@@ -480,63 +479,78 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
         this.lvlcompletetex = TextureFactory.load_unfiltered("data/lvlcomplete.png");
     }
 
+    private void add_cache(Texture texture, float x, float y, int srcX, int srcY) {
+        this.menu_cache.add(texture, x, y, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, srcX, srcY, 48, 48, false, false);
+    }
+
     private void generate_caches() {
         this.menu_cache.setProjectionMatrix(G.cam_p.combined);
         this.menu_cache.beginCache();
         for (int x = 0; x < 5; x++) {
-            this.menu_cache.add(this.btntex, G.width - ((x + 1) * 56), 8.0f, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, 56, (x + 16) * 48, 48, 48, false, false);
+            add_cache(this.btntex, G.width - ((x + 1) * 56), 8.0f, 56, (x + 16) * 48);
         }
         this.sandbox_categories_cache_id = this.menu_cache.endCache();
+
+        // Misc category
         this.menu_cache.beginCache();
-        this.menu_cache.add(this.btntex, G.width - 56, -4.0f, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, 8, 384, 48, 48, false, false);
-        this.menu_cache.add(this.btntex, G.width - 112, 8.0f, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, 56, 720, 48, 48, false, false);
-        this.menu_cache.add(this.btntex, G.width - 168, 8.0f, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, Input.Keys.BUTTON_L2, 0, 48, 48, false, false);
-        this.menu_cache.add(this.btntex, G.width - 224, 8.0f, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, Input.Keys.BUTTON_L2, 48, 48, 48, false, false);
-        this.menu_cache.add(this.btntex, G.width - 280, 8.0f, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, Input.Keys.BUTTON_L2, 96, 48, 48, false, false);
-        this.menu_cache.add(this.btntex, G.width - 336, 8.0f, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, Input.Keys.BUTTON_L2, Input.Keys.NUMPAD_0, 48, 48, false, false);
+        add_cache(this.btntex, G.width - 56, -4.0f, 8, 8*48);
+        add_cache(this.btntex, G.width - 112, 8.0f, 8+48, 15*48);
+        add_cache(this.btntex, G.width - 168, 8.0f, 8+2*48, 0);
+        add_cache(this.btntex, G.width - 224, 8.0f, 8+2*48, 1*48);
+        add_cache(this.btntex, G.width - 280, 8.0f, 8+2*48, 2*48);
+        add_cache(this.btntex, G.width - 336, 8.0f, 8+2*48, 3*48);
         this.sandbox_category_cache_id[0] = this.menu_cache.endCache();
+
+        // Game category
         this.menu_cache.beginCache();
-        this.menu_cache.add(this.btntex, G.width - 56, -4.0f, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, 8, 384, 48, 48, false, false);
-        this.menu_cache.add(this.btntex, G.width - 112, 8.0f, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, 56, 288, 48, 48, false, false);
-        this.menu_cache.add(this.btntex, G.width - 168, 8.0f, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, 56, 336, 48, 48, false, false);
-        this.menu_cache.add(this.btntex, G.width - 224, 8.0f, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, 56, 672, 48, 48, false, false);
+        add_cache(this.btntex, G.width - 56, -4.0f, 8, 8*48);
+        add_cache(this.btntex, G.width - 112, 8.0f, 8+48, 6*48);
+        add_cache(this.btntex, G.width - 168, 8.0f, 8+48, 7*48);
+        add_cache(this.btntex, G.width - 224, 8.0f, 8+48, 14*48);
         this.sandbox_category_cache_id[1] = this.menu_cache.endCache();
+
+        // Electronics
         this.menu_cache.beginCache();
-        this.menu_cache.add(this.btntex, G.width - 56, -4.0f, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, 8, 384, 48, 48, false, false);
+        add_cache(this.btntex, G.width - 56, -4.0f, 8, 8*48);
         for (int x2 = 8; x2 < 14; x2++) {
-            this.menu_cache.add(this.btntex, G.width - (((x2 + 2) - 8) * 56), 8.0f, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, 56, x2 * 48, 48, 48, false, false);
+            add_cache(this.btntex, G.width - (((x2 + 2) - 8) * 56), 8.0f, 8+48, x2 * 48);
         }
         this.sandbox_category_cache_id[2] = this.menu_cache.endCache();
+
+        // Hard objects category
         this.menu_cache.beginCache();
-        this.menu_cache.add(this.btntex, G.width - 56, -4.0f, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, 8, 384, 48, 48, false, false);
+        add_cache(this.btntex, G.width - 56, -4.0f, 8, 8*48);
         for (int x3 = 3; x3 < 6; x3++) {
-            this.menu_cache.add(this.btntex, G.width - (((x3 + 2) - 3) * 56), 8.0f, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, 56, x3 * 48, 48, 48, false, false);
+            add_cache(this.btntex, G.width - (((x3 + 2) - 3) * 56), 8.0f, 8+48, x3 * 48);
         }
         this.sandbox_category_cache_id[3] = this.menu_cache.endCache();
+
+        // Wooden objects category
         this.menu_cache.beginCache();
-        this.menu_cache.add(this.btntex, G.width - 56, -4.0f, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, 8, 384, 48, 48, false, false);
+        add_cache(this.btntex, G.width - 56, -4.0f, 8, 8*48);
         for (int x4 = 0; x4 < 3; x4++) {
-            this.menu_cache.add(this.btntex, G.width - ((x4 + 2) * 56), 8.0f, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, 56, x4 * 48, 48, 48, false, false);
+            add_cache(this.btntex, G.width - ((x4 + 2) * 56), 8.0f, 8+48, x4 * 48);
         }
         this.sandbox_category_cache_id[4] = this.menu_cache.endCache();
+
         this.menu_cache.beginCache();
-        this.menu_cache.add(this.btntex, 8.0f, (G.height - 48) - 8, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, 8, 0, 48, 48, false, false);
-        this.menu_cache.add(this.btntex, 8.0f, (((((G.height - 48) - 8) - 48) - 8) - 48) - 8, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, 8, 720, 48, 48, false, false);
-        this.menu_cache.add(this.btntex, 8.0f, (((((G.height - 48) - 8) - 48) - 8) - 48) - 8, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, 8, 432, 48, 48, false, false);
-        this.menu_cache.add(this.btntex, 8.0f, (G.height - 48) - 8, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, 8, 48, 48, 48, false, false);
-        this.menu_cache.add(this.btntex, 8.0f, (((((((G.height - 48) - 8) - 48) - 8) - 48) - 8) - 48) - 8, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, 8, 768, 48, 48, false, false);
-        this.menu_cache.add(this.btntex, 8.0f, (((((((((G.height - 48) - 8) - 48) - 8) - 48) - 8) - 48) - 8) - 48) - 8, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, 8, 816, 48, 48, false, false);
-        this.menu_cache.add(this.btntex, G.width - 56, G.height - 56, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, 8, 432, 48, 48, false, false);
+        add_cache(this.btntex, 8.0f, (G.height - 48) - 8, 8, 0);
+        add_cache(this.btntex, 8.0f, (((((G.height - 48) - 8) - 48) - 8) - 48) - 8, 8, 720);
+        add_cache(this.btntex, 8.0f, (((((G.height - 48) - 8) - 48) - 8) - 48) - 8, 8, 432);
+        add_cache(this.btntex, 8.0f, (G.height - 48) - 8, 8, 48);
+        add_cache(this.btntex, 8.0f, (((((((G.height - 48) - 8) - 48) - 8) - 48) - 8) - 48) - 8, 8, 768);
+        add_cache(this.btntex, 8.0f, (((((((((G.height - 48) - 8) - 48) - 8) - 48) - 8) - 48) - 8) - 48) - 8, 8, 816);
+        add_cache(this.btntex, G.width - 56, G.height - 56, 8, 432);
         this.left_menu_cache_id = this.menu_cache.endCache();
         this.menu_cache.beginCache();
         this.menu_cache.setColor(Color.WHITE);
-        this.menu_cache.add(this.btntex, 8.0f, (((G.height - 48) - 8) - 48) - 8, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, Input.Keys.NUMPAD_8, 0, 48, 48, false, false);
+        add_cache(this.btntex, 8.0f, (((G.height - 48) - 8) - 48) - 8, Input.Keys.NUMPAD_8, 0);
         this.menu_cache.setColor(1.0f, 1.0f, 1.0f, 0.4f);
-        this.menu_cache.add(this.btntex, 8.0f, (((G.height - 48) - 8) - 48) - 8, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, Input.Keys.NUMPAD_8, 0, 48, 48, false, false);
+        add_cache(this.btntex, 8.0f, (((G.height - 48) - 8) - 48) - 8, Input.Keys.NUMPAD_8, 0);
         this.menu_cache.setColor(Color.WHITE);
-        this.menu_cache.add(this.btntex, 8.0f, (((((G.height - 48) - 8) - 48) - 8) - 48) - 8, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, Input.Keys.NUMPAD_8, 48, 48, 48, false, false);
+        add_cache(this.btntex, 8.0f, (((((G.height - 48) - 8) - 48) - 8) - 48) - 8, Input.Keys.NUMPAD_8, 48);
         this.menu_cache.setColor(1.0f, 1.0f, 1.0f, 0.4f);
-        this.menu_cache.add(this.btntex, 8.0f, (((((G.height - 48) - 8) - 48) - 8) - 48) - 8, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, Input.Keys.NUMPAD_8, 48, 48, 48, false, false);
+        add_cache(this.btntex, 8.0f, (((((G.height - 48) - 8) - 48) - 8) - 48) - 8, Input.Keys.NUMPAD_8, 48);
         this.menu_cache.setColor(Color.WHITE);
         this.undo_cache_id = this.menu_cache.endCache();
         this.menu_cache.beginCache();
@@ -546,24 +560,24 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
             } else {
                 this.menu_cache.setColor(1.0f, 1.0f, 1.0f, 0.2f);
             }
-            this.menu_cache.add(this.btntex, (G.width - 48) - 8, (G.height - 48) - 8, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, 8, 288, 48, 48, false, false);
-            this.menu_cache.add(this.btntex, (G.width - 48) - 8, (G.height - 48) - 8, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, 8, 240, 48, 48, false, false);
-            this.menu_cache.add(this.btntex, (((G.width - 48) - 8) - 48) - 8, (G.height - 48) - 8, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, 8, 96, 48, 48, false, false);
+            add_cache(this.btntex, (G.width - 48) - 8, (G.height - 48) - 8, 8, 288);
+            add_cache(this.btntex, (G.width - 48) - 8, (G.height - 48) - 8, 8, 240);
+            add_cache(this.btntex, (((G.width - 48) - 8) - 48) - 8, (G.height - 48) - 8, 8, 96);
             if (x5 == 1) {
                 this.menu_cache.setColor(Color.WHITE);
             }
-            this.menu_cache.add(this.btntex, (G.width - 48) - 8, (((G.height - 48) - 8) - 48) - 8, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, 8, 336, 48, 48, false, false);
+            add_cache(this.btntex, (G.width - 48) - 8, (((G.height - 48) - 8) - 48) - 8, 8, 336);
         }
         this.object_menu_cache_id = this.menu_cache.endCache();
         this.menu_cache.beginCache();
-        this.menu_cache.add(this.btntex, (G.width - 48) - 8, (G.height - 48) - 8, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, 8, 528, 48, 48, false, false);
-        this.menu_cache.add(this.btntex, (G.width - 48) - 8, (G.height - 48) - 8, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, 8, 576, 48, 48, false, false);
-        this.menu_cache.add(this.btntex, (((((G.width - 48) - 8) - 48) - 8) - 48) - 8, (G.height - 48) - 8, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, 8, 624, 48, 48, false, false);
-        this.menu_cache.add(this.btntex, (((((G.width - 48) - 8) - 48) - 8) - 48) - 8, (G.height - 48) - 8, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, 8, 672, 48, 48, false, false);
-        this.menu_cache.add(this.btntex, (G.width - 48) - 8, (G.height - 48) - 8, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, 8, 864, 48, 48, false, false);
-        this.menu_cache.add(this.btntex, (G.width - 48) - 8, (G.height - 48) - 8, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, 8, 912, 48, 48, false, false);
-        this.menu_cache.add(this.btntex, (G.width - 48) - 8, (G.height - 48) - 8, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, 8, 960, 48, 48, false, false);
-        this.menu_cache.add(this.btntex, (G.width - 48) - 8, (G.height - 48) - 8, 0.0f, 0.0f, 48.0f, 48.0f, 1.0f, 1.0f, 0.0f, 56, 624, 48, 48, false, false);
+        add_cache(this.btntex, (G.width - 48) - 8, (G.height - 48) - 8, 8, 528);
+        add_cache(this.btntex, (G.width - 48) - 8, (G.height - 48) - 8, 8, 576);
+        add_cache(this.btntex, (((((G.width - 48) - 8) - 48) - 8) - 48) - 8, (G.height - 48) - 8, 8, 624);
+        add_cache(this.btntex, (((((G.width - 48) - 8) - 48) - 8) - 48) - 8, (G.height - 48) - 8, 8, 672);
+        add_cache(this.btntex, (G.width - 48) - 8, (G.height - 48) - 8, 8, 864);
+        add_cache(this.btntex, (G.width - 48) - 8, (G.height - 48) - 8, 8, 912);
+        add_cache(this.btntex, (G.width - 48) - 8, (G.height - 48) - 8, 8, 960);
+        add_cache(this.btntex, (G.width - 48) - 8, (G.height - 48) - 8, 56, 624);
         this.special_menu_cache_id = this.menu_cache.endCache();
     }
 
