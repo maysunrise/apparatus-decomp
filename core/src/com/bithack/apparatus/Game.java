@@ -2056,9 +2056,10 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
         Widget w;
         Widget w2;
         boolean z = true;
+
         switch (key) {
-            case 4:
-            case 30:
+            case Input.Keys.BACK:
+            case Input.Keys.B:
                 if (from_sandbox) {
                     end_challenge_testing();
                 } else if (sandbox) {
@@ -2086,114 +2087,106 @@ public class Game extends Screen implements InputProcessor, WidgetValueCallback 
                 }
                 Settings.save();
                 break;
-            case 7:
+            case Input.Keys.NUM_0:
                 set_bg(10);
                 this.level_category = 2;
                 break;
-            case 8:
+            case Input.Keys.NUM_1:
                 set_bg(1);
                 break;
-            case 9:
+            case Input.Keys.NUM_2:
                 set_bg(2);
                 break;
-            case 10:
+            case Input.Keys.NUM_3:
                 set_bg(3);
                 break;
-            case 11:
+            case Input.Keys.NUM_4:
                 set_bg(4);
                 break;
-            case 12:
+            case Input.Keys.NUM_5:
                 set_bg(5);
                 break;
-            case 13:
+            case Input.Keys.NUM_6:
                 set_bg(6);
                 break;
-            case 14:
+            case Input.Keys.NUM_7:
                 set_bg(7);
                 break;
-            case 15:
+            case Input.Keys.NUM_8:
                 set_bg(8);
                 break;
-            case 16:
+            case Input.Keys.NUM_9:
                 set_bg(9);
                 break;
-            case 19:
-            case 51:
+            case Input.Keys.UP:
+            case Input.Keys.W:
                 this.camera_h.add_velocity(0.0f, 1.0f);
                 break;
-            case 20:
-            case 47:
+            case Input.Keys.DOWN:
+            case Input.Keys.S:
                 this.camera_h.add_velocity(0.0f, -1.0f);
                 break;
-            case 21:
+            case Input.Keys.LEFT:
                 this.camera_h.add_velocity(-1.0f, 0.0f);
                 break;
-            case 22:
+            case Input.Keys.RIGHT:
                 this.camera_h.add_velocity(1.0f, 0.0f);
                 break;
-            case 29:
+            case Input.Keys.A:
                 if (!(a_down || this.active_panel == null || (w2 = this.active_panel.find(0)) == null)) {
                     w2.touch_down_local(0, 0);
                 }
                 a_down = true;
                 break;
-            case 32:
+            case Input.Keys.D:
                 if (!(d_down || this.active_panel == null || (w = this.active_panel.find(2)) == null)) {
                     w.touch_down_local(0, 0);
                 }
                 d_down = true;
                 break;
-            case 33:
-                if (enable_bg) {
-                    z = false;
-                }
-                enable_bg = z;
-                break;
-            case 34:
-                physics_stability = 2;
-                break;
-            case 35:
-                physics_stability = 1;
-                break;
-            case 41:
+            case Input.Keys.M:
                 this.camera_h.camera_pos.z += 1.0f;
                 break;
-            case 42:
+            case Input.Keys.N:
                 this.camera_h.camera_pos.z -= 1.0f;
                 break;
-            case 43:
+            case Input.Keys.O:
                 open(new File(String.valueOf(Gdx.files.getExternalStoragePath()) + "/ApparatusLevels/" + "TESTLEVEL.jar"));
                 break;
-            case 44:
+            case Input.Keys.P:
                 this.um.undo();
                 break;
-            case 45:
+            case Input.Keys.Q:
                 if (enable_menu) {
                     z = false;
                 }
                 enable_menu = z;
                 break;
-            case 46:
+            case Input.Keys.R:
                 if (enable_shadows) {
                     z = false;
                 }
                 enable_shadows = z;
                 break;
-            case 48:
+            case Input.Keys.T:
                 toggle_tracing();
                 break;
-            case 49:
+            case Input.Keys.U:
                 this.level_filename = "TESTLEVEL";
                 save();
                 break;
-            case 52:
+            case Input.Keys.Y:
+                if (!sandbox) break;
+
                 BaseObject o = ObjectFactory.adapter.create(world, 2, 18);
                 Damper _d = (Damper) o;
                 _d.g1.__unique_id = _d.__unique_id * 10000;
                 _d.g2.__unique_id = _d.__unique_id * 10000000;
                 this.om.add((GrabableObject) o);
                 break;
-            case 54:
+            case Input.Keys.Z:
+                if (!sandbox) break;
+
                 ChristmasGift oo = (ChristmasGift) ObjectFactory.adapter.create(world, 2, 17);
                 oo.set_property("sx", 0.25f + (0.125f * ((float) new Random().nextInt(4))));
                 oo.set_property("sy", 0.25f + (0.125f * ((float) new Random().nextInt(4))));
